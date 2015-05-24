@@ -72,7 +72,7 @@ img {
 <pre class="r"><code>library(data.table)
 library(dplyr)
 library(pander)
-options(scipen=1, digits=2,width=100)</code></pre>
+options(scipen=1, digits=2, width=120)</code></pre>
 </div>
 <div id="lendo-os-dados" class="section level3">
 <h3>Lendo os dados</h3>
@@ -116,311 +116,73 @@ str(dados)</code></pre>
                   Populacao = sum(POPULACAO),
                   Veiculos = sum(TOTAL),
                   Automoveis = sum(AUTOMOVEL),
-                  Motocicletas = sum(MOTOCICLETA))</code></pre>
-<pre class="r"><code>pander(data.frame(tabela))</code></pre>
-<table>
-<caption>Table continues below</caption>
-<colgroup>
-<col width="6%"></col>
-<col width="9%"></col>
-<col width="16%"></col>
-<col width="15%"></col>
-<col width="16%"></col>
-</colgroup>
-<thead>
-<tr class="header">
-<th align="center">UF</th>
-<th align="center">Nmun</th>
-<th align="center">Populacao</th>
-<th align="center">Veiculos</th>
-<th align="center">Automoveis</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="center">AC</td>
-<td align="center">22</td>
-<td align="center">776463</td>
-<td align="center">205777</td>
-<td align="center">67461</td>
-</tr>
-<tr class="even">
-<td align="center">AL</td>
-<td align="center">102</td>
-<td align="center">3300935</td>
-<td align="center">614566</td>
-<td align="center">275556</td>
-</tr>
-<tr class="odd">
-<td align="center">AM</td>
-<td align="center">62</td>
-<td align="center">3807921</td>
-<td align="center">700849</td>
-<td align="center">325698</td>
-</tr>
-<tr class="even">
-<td align="center">AP</td>
-<td align="center">16</td>
-<td align="center">734996</td>
-<td align="center">152634</td>
-<td align="center">64386</td>
-</tr>
-<tr class="odd">
-<td align="center">BA</td>
-<td align="center">417</td>
-<td align="center">15044137</td>
-<td align="center">3158326</td>
-<td align="center">1415342</td>
-</tr>
-<tr class="even">
-<td align="center">CE</td>
-<td align="center">184</td>
-<td align="center">8778576</td>
-<td align="center">2384395</td>
-<td align="center">881571</td>
-</tr>
-<tr class="odd">
-<td align="center">DF</td>
-<td align="center">1</td>
-<td align="center">2789761</td>
-<td align="center">1511110</td>
-<td align="center">1099719</td>
-</tr>
-<tr class="even">
-<td align="center">ES</td>
-<td align="center">78</td>
-<td align="center">3839366</td>
-<td align="center">1585076</td>
-<td align="center">797528</td>
-</tr>
-<tr class="odd">
-<td align="center">GO</td>
-<td align="center">246</td>
-<td align="center">6434048</td>
-<td align="center">3169088</td>
-<td align="center">1512266</td>
-</tr>
-<tr class="even">
-<td align="center">MA</td>
-<td align="center">217</td>
-<td align="center">6794301</td>
-<td align="center">1215478</td>
-<td align="center">335793</td>
-</tr>
-<tr class="odd">
-<td align="center">MG</td>
-<td align="center">853</td>
-<td align="center">20593356</td>
-<td align="center">8884663</td>
-<td align="center">4926454</td>
-</tr>
-<tr class="even">
-<td align="center">MS</td>
-<td align="center">79</td>
-<td align="center">2587269</td>
-<td align="center">1253199</td>
-<td align="center">580821</td>
-</tr>
-<tr class="odd">
-<td align="center">MT</td>
-<td align="center">141</td>
-<td align="center">3182113</td>
-<td align="center">1565739</td>
-<td align="center">543484</td>
-</tr>
-<tr class="even">
-<td align="center">PA</td>
-<td align="center">144</td>
-<td align="center">8e+06</td>
-<td align="center">1428355</td>
-<td align="center">455649</td>
-</tr>
-<tr class="odd">
-<td align="center">PB</td>
-<td align="center">223</td>
-<td align="center">3914421</td>
-<td align="center">959085</td>
-<td align="center">407624</td>
-</tr>
-<tr class="even">
-<td align="center">PE</td>
-<td align="center">185</td>
-<td align="center">9208550</td>
-<td align="center">2396738</td>
-<td align="center">1088338</td>
-</tr>
-<tr class="odd">
-<td align="center">PI</td>
-<td align="center">224</td>
-<td align="center">3184166</td>
-<td align="center">855445</td>
-<td align="center">255114</td>
-</tr>
-<tr class="even">
-<td align="center">PR</td>
-<td align="center">399</td>
-<td align="center">10997465</td>
-<td align="center">6351183</td>
-<td align="center">3759306</td>
-</tr>
-<tr class="odd">
-<td align="center">RJ</td>
-<td align="center">92</td>
-<td align="center">16369179</td>
-<td align="center">5568514</td>
-<td align="center">3839651</td>
-</tr>
-<tr class="even">
-<td align="center">RN</td>
-<td align="center">167</td>
-<td align="center">3373959</td>
-<td align="center">967299</td>
-<td align="center">430289</td>
-</tr>
-<tr class="odd">
-<td align="center">RO</td>
-<td align="center">52</td>
-<td align="center">1728214</td>
-<td align="center">758308</td>
-<td align="center">212652</td>
-</tr>
-<tr class="even">
-<td align="center">RR</td>
-<td align="center">15</td>
-<td align="center">488072</td>
-<td align="center">165339</td>
-<td align="center">53704</td>
-</tr>
-<tr class="odd">
-<td align="center">RS</td>
-<td align="center">497</td>
-<td align="center">11164043</td>
-<td align="center">5885383</td>
-<td align="center">3622309</td>
-</tr>
-<tr class="even">
-<td align="center">SC</td>
-<td align="center">295</td>
-<td align="center">6634254</td>
-<td align="center">4201255</td>
-<td align="center">2428891</td>
-</tr>
-<tr class="odd">
-<td align="center">SE</td>
-<td align="center">75</td>
-<td align="center">2195662</td>
-<td align="center">575510</td>
-<td align="center">262664</td>
-</tr>
-<tr class="even">
-<td align="center">SP</td>
-<td align="center">645</td>
-<td align="center">43663669</td>
-<td align="center">24560201</td>
-<td align="center">15643414</td>
-</tr>
-<tr class="odd">
-<td align="center">TO</td>
-<td align="center">139</td>
-<td align="center">1478164</td>
-<td align="center">527213</td>
-<td align="center">158702</td>
-</tr>
-</tbody>
-</table>
-<table>
-<colgroup>
-<col width="19%"></col>
-</colgroup>
-<thead>
-<tr class="header">
-<th align="center">Motocicletas</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="center">86048</td>
-</tr>
-<tr class="even">
-<td align="center">199317</td>
-</tr>
-<tr class="odd">
-<td align="center">183987</td>
-</tr>
-<tr class="even">
-<td align="center">50326</td>
-</tr>
-<tr class="odd">
-<td align="center">1002208</td>
-</tr>
-<tr class="even">
-<td align="center">1045078</td>
-</tr>
-<tr class="odd">
-<td align="center">154277</td>
-</tr>
-<tr class="even">
-<td align="center">373365</td>
-</tr>
-<tr class="odd">
-<td align="center">743879</td>
-</tr>
-<tr class="even">
-<td align="center">601923</td>
-</tr>
-<tr class="odd">
-<td align="center">2106326</td>
-</tr>
-<tr class="even">
-<td align="center">313390</td>
-</tr>
-<tr class="odd">
-<td align="center">495288</td>
-</tr>
-<tr class="even">
-<td align="center">593828</td>
-</tr>
-<tr class="odd">
-<td align="center">366699</td>
-</tr>
-<tr class="even">
-<td align="center">828291</td>
-</tr>
-<tr class="odd">
-<td align="center">410745</td>
-</tr>
-<tr class="even">
-<td align="center">1011274</td>
-</tr>
-<tr class="odd">
-<td align="center">748356</td>
-</tr>
-<tr class="even">
-<td align="center">340918</td>
-</tr>
-<tr class="odd">
-<td align="center">319337</td>
-</tr>
-<tr class="even">
-<td align="center">64676</td>
-</tr>
-<tr class="odd">
-<td align="center">959339</td>
-</tr>
-<tr class="even">
-<td align="center">763019</td>
-</tr>
-<tr class="odd">
-<td align="center">190159</td>
-</tr>
-<tr class="even">
-<td align="center">3978276</td>
-</tr>
-<tr class="odd">
-<td align="center">184135</td>
-</tr>
-</tbody>
-</table>
+                  Motocicletas = sum(MOTOCICLETA))
+pandoc.table(data.frame(tabela),style = &quot;simple&quot;)</code></pre>
+<pre><code>## 
+## 
+##  UF   Nmun   Populacao   Veiculos   Automoveis 
+## ---- ------ ----------- ---------- ------------
+##  AC    22     776463      205777      67461    
+##  AL   102     3300935     614566      275556   
+##  AM    62     3807921     700849      325698   
+##  AP    16     734996      152634      64386    
+##  BA   417    15044137    3158326     1415342   
+##  CE   184     8778576    2384395      881571   
+##  DF    1      2789761    1511110     1099719   
+##  ES    78     3839366    1585076      797528   
+##  GO   246     6434048    3169088     1512266   
+##  MA   217     6794301    1215478      335793   
+##  MG   853    20593356    8884663     4926454   
+##  MS    79     2587269    1253199      580821   
+##  MT   141     3182113    1565739      543484   
+##  PA   144      8e+06     1428355      455649   
+##  PB   223     3914421     959085      407624   
+##  PE   185     9208550    2396738     1088338   
+##  PI   224     3184166     855445      255114   
+##  PR   399    10997465    6351183     3759306   
+##  RJ    92    16369179    5568514     3839651   
+##  RN   167     3373959     967299      430289   
+##  RO    52     1728214     758308      212652   
+##  RR    15     488072      165339      53704    
+##  RS   497    11164043    5885383     3622309   
+##  SC   295     6634254    4201255     2428891   
+##  SE    75     2195662     575510      262664   
+##  SP   645    43663669    24560201    15643414  
+##  TO   139     1478164     527213      158702   
+## 
+## Table: Table continues below
+## 
+##  
+## 
+##  Motocicletas 
+## --------------
+##     86048     
+##     199317    
+##     183987    
+##     50326     
+##    1002208    
+##    1045078    
+##     154277    
+##     373365    
+##     743879    
+##     601923    
+##    2106326    
+##     313390    
+##     495288    
+##     593828    
+##     366699    
+##     828291    
+##     410745    
+##    1011274    
+##     748356    
+##     340918    
+##     319337    
+##     64676     
+##     959339    
+##     763019    
+##     190159    
+##    3978276    
+##     184135</code></pre>
 <p>teste</p>
 </div>
 
