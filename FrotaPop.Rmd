@@ -1,0 +1,32 @@
+---
+title: "População e Frota de Veículos"
+author: "Mario Azevedo"
+date: "Sunday, May 24, 2015"
+output: html_document
+---
+
+###Carregando as bibliotecas necessárias
+
+```{r, message=FALSE, warning=FALSE}
+library(data.table)
+library(dplyr)
+```
+
+###Lendo os dados
+
+```{r}
+dados <- fread('FrotaBR122013.csv',sep=';')
+str(dados)
+```
+
+###Características Gerais
+
+1. Número de município, população e frota total por estado
+
+```{r}
+tabela <- group_by(dados,UF) %>%
+        summarise(Nmun = n(),
+                  Populacao = sum(POPULACAO),
+                  Frota = sum(TOTAL))
+print(tabela)
+```
