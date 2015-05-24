@@ -2,7 +2,10 @@
 title: "População e Frota de Veículos"
 author: "Mario Azevedo"
 date: "Sunday, May 24, 2015"
-output: html_document
+output:
+  html_document:
+    keep_md: yes
+  word_document: default
 ---
 
 ###Carregando as bibliotecas necessárias
@@ -10,6 +13,8 @@ output: html_document
 ```{r, message=FALSE, warning=FALSE}
 library(data.table)
 library(dplyr)
+library(pander)
+options(scipen=1, digits=2,width=100)
 ```
 
 ###Lendo os dados
@@ -27,6 +32,12 @@ str(dados)
 tabela <- group_by(dados,UF) %>%
         summarise(Nmun = n(),
                   Populacao = sum(POPULACAO),
-                  Frota = sum(TOTAL))
-print(tabela)
+                  Veiculos = sum(TOTAL),
+                  Automoveis = sum(AUTOMOVEL),
+                  Motocicletas = sum(MOTOCICLETA))
+```{r results='asis'}
+pander(data.frame(tabela))
 ```
+
+
+teste
