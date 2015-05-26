@@ -71,7 +71,6 @@ img {
 <h3>Carregando as bibliotecas necessárias</h3>
 <pre class="r"><code>library(data.table)
 library(dplyr)
-library(pander)
 library(knitr)
 library(stringr)
 options(scipen=1, digits=2, width=120)</code></pre>
@@ -82,70 +81,181 @@ options(scipen=1, digits=2, width=120)</code></pre>
 estados &lt;- fread('estados.csv',sep=';')
 estados &lt;- mutate(estados,CAPITAL=str_trim(CAPITAL))
 estados &lt;- mutate(estados,ESTADO=str_trim(ESTADO))
-str(dados)</code></pre>
-<pre><code>## Classes 'data.table' and 'data.frame':   5570 obs. of  25 variables:
-##  $ UF             : chr  &quot;AC&quot; &quot;AC&quot; &quot;AC&quot; &quot;AC&quot; ...
-##  $ MUNICIPIO      : chr  &quot;ACRELANDIA&quot; &quot;ASSIS BRASIL&quot; &quot;BRASILEIA&quot; &quot;BUJARI&quot; ...
-##  $ POPULACAO      : int  13353 6480 22899 9003 9836 80377 16099 32411 7147 16410 ...
-##  $ TOTAL          : int  3835 963 5670 1260 1246 21991 3649 2227 62 2347 ...
-##  $ AUTOMOVEL      : int  809 197 1443 374 349 4441 978 370 8 329 ...
-##  $ BONDE          : int  0 0 0 0 0 0 0 0 0 0 ...
-##  $ CAMINHAO       : int  201 15 186 86 67 616 183 93 2 71 ...
-##  $ CAMINHAO TRATOR: int  9 0 45 2 0 44 36 0 0 6 ...
-##  $ CAMINHONETE    : int  292 75 532 160 138 1765 393 261 8 204 ...
-##  $ CAMIONETA      : int  36 10 68 14 9 234 39 31 0 14 ...
-##  $ CHASSI PLATAF  : int  0 0 0 1 0 1 0 0 0 0 ...
-##  $ CICLOMOTOR     : int  0 0 1 2 0 0 0 0 0 1 ...
-##  $ MICRO-ONIBUS   : int  6 2 3 3 1 53 1 1 0 2 ...
-##  $ MOTOCICLETA    : int  2151 582 2529 570 567 10685 1443 1114 30 1388 ...
-##  $ MOTONETA       : int  252 76 750 27 90 3931 493 340 14 309 ...
-##  $ ONIBUS         : int  41 3 11 10 9 60 13 6 0 9 ...
-##  $ QUADRICICLO    : int  0 0 0 0 0 0 0 0 0 0 ...
-##  $ REBOQUE        : int  22 3 22 8 12 17 18 6 0 1 ...
-##  $ SEMI-REBOQUE   : int  13 0 70 0 3 61 42 0 0 11 ...
-##  $ SIDE-CAR       : int  0 0 0 0 0 0 0 0 0 0 ...
-##  $ OUTROS         : int  0 0 0 0 0 0 0 0 0 0 ...
-##  $ TRATOR ESTEI   : int  0 0 0 0 0 0 0 0 0 0 ...
-##  $ TRATOR RODAS   : int  0 0 0 0 0 1 0 0 0 0 ...
-##  $ TRICICLO       : int  0 0 3 2 0 4 1 1 0 0 ...
-##  $ UTILITARIO     : int  3 0 7 1 1 78 9 4 0 2 ...
-##  - attr(*, &quot;.internal.selfref&quot;)=&lt;externalptr&gt;</code></pre>
-<pre class="r"><code>str(estados)</code></pre>
-<pre><code>## Classes 'data.table' and 'data.frame':   27 obs. of  3 variables:
-##  $ SIGLA  : chr  &quot;AC&quot; &quot;AL&quot; &quot;AP&quot; &quot;AM&quot; ...
-##  $ ESTADO : chr  &quot;ACRE&quot; &quot;ALAGOAS&quot; &quot;AMAPÁ&quot; &quot;AMAZONAS&quot; ...
-##  $ CAPITAL: chr  &quot;RIO BRANCO&quot; &quot;MACEIO&quot; &quot;MACAPA&quot; &quot;MANAUS&quot; ...
-##  - attr(*, &quot;.internal.selfref&quot;)=&lt;externalptr&gt;</code></pre>
-<pre class="r"><code>estados</code></pre>
-<pre><code>##     SIGLA              ESTADO        CAPITAL
-##  1:    AC                ACRE     RIO BRANCO
-##  2:    AL             ALAGOAS         MACEIO
-##  3:    AP               AMAPÁ         MACAPA
-##  4:    AM            AMAZONAS         MANAUS
-##  5:    BA               BAHIA       SALVADOR
-##  6:    CE               CEARÁ      FORTALEZA
-##  7:    DF    DISTRITO FEDERAL       BRASILIA
-##  8:    ES      ESPÍRITO SANTO        VITORIA
-##  9:    GO               GOIÁS        GOIANIA
-## 10:    MA            MARANHÃO       SAO LUIS
-## 11:    MT         MATO GROSSO         CUIABA
-## 12:    MS  MATO GROSSO DO SUL   CAMPO GRANDE
-## 13:    MG        MINAS GERAIS BELO HORIZONTE
-## 14:    PA                PARÁ          BELEM
-## 15:    PB             PARAÍBA    JOAO PESSOA
-## 16:    PR              PARANÁ       CURITIBA
-## 17:    PE          PERNAMBUCO         RECIFE
-## 18:    PI               PIAUI       TERESINA
-## 19:    RJ      RIO DE JANEIRO RIO DE JANEIRO
-## 20:    RN RIO GRANDE DO NORTE          NATAL
-## 21:    RS   RIO GRANDE DO SUL   PORTO ALEGRE
-## 22:    RO            RONDÔNIA    PORTO VELHO
-## 23:    RR             RORAIMA      BOA VISTA
-## 24:    SC      SANTA CATARINA  FLORIANOPOLIS
-## 25:    SP           SÃO PAULO      SAO PAULO
-## 26:    SE             SERGIPE        ARACAJU
-## 27:    TO           TOCANTINS         PALMAS
-##     SIGLA              ESTADO        CAPITAL</code></pre>
+kable(group_by(estados,REGIAO))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">SIGLA</th>
+<th align="left">ESTADO</th>
+<th align="left">CAPITAL</th>
+<th align="left">REGIAO</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">AC</td>
+<td align="left">ACRE</td>
+<td align="left">RIO BRANCO</td>
+<td align="left">N</td>
+</tr>
+<tr class="even">
+<td align="left">AL</td>
+<td align="left">ALAGOAS</td>
+<td align="left">MACEIO</td>
+<td align="left">NE</td>
+</tr>
+<tr class="odd">
+<td align="left">AP</td>
+<td align="left">AMAPA</td>
+<td align="left">MACAPA</td>
+<td align="left">N</td>
+</tr>
+<tr class="even">
+<td align="left">AM</td>
+<td align="left">AMAZONAS</td>
+<td align="left">MANAUS</td>
+<td align="left">N</td>
+</tr>
+<tr class="odd">
+<td align="left">BA</td>
+<td align="left">BAHIA</td>
+<td align="left">SALVADOR</td>
+<td align="left">NE</td>
+</tr>
+<tr class="even">
+<td align="left">CE</td>
+<td align="left">CEARA</td>
+<td align="left">FORTALEZA</td>
+<td align="left">NE</td>
+</tr>
+<tr class="odd">
+<td align="left">DF</td>
+<td align="left">DISTRITO FEDERAL</td>
+<td align="left">BRASILIA</td>
+<td align="left">CO</td>
+</tr>
+<tr class="even">
+<td align="left">ES</td>
+<td align="left">ESPIRITO SANTO</td>
+<td align="left">VITORIA</td>
+<td align="left">SE</td>
+</tr>
+<tr class="odd">
+<td align="left">GO</td>
+<td align="left">GOIAS</td>
+<td align="left">GOIANIA</td>
+<td align="left">CO</td>
+</tr>
+<tr class="even">
+<td align="left">MA</td>
+<td align="left">MARANHAO</td>
+<td align="left">SAO LUIS</td>
+<td align="left">NE</td>
+</tr>
+<tr class="odd">
+<td align="left">MT</td>
+<td align="left">MATO GROSSO</td>
+<td align="left">CUIABA</td>
+<td align="left">CO</td>
+</tr>
+<tr class="even">
+<td align="left">MS</td>
+<td align="left">MATO GROSSO DO SUL</td>
+<td align="left">CAMPO GRANDE</td>
+<td align="left">CO</td>
+</tr>
+<tr class="odd">
+<td align="left">MG</td>
+<td align="left">MINAS GERAIS</td>
+<td align="left">BELO HORIZONTE</td>
+<td align="left">SE</td>
+</tr>
+<tr class="even">
+<td align="left">PA</td>
+<td align="left">PARA</td>
+<td align="left">BELEM</td>
+<td align="left">N</td>
+</tr>
+<tr class="odd">
+<td align="left">PB</td>
+<td align="left">PARAIBA</td>
+<td align="left">JOAO PESSOA</td>
+<td align="left">NE</td>
+</tr>
+<tr class="even">
+<td align="left">PR</td>
+<td align="left">PARANA</td>
+<td align="left">CURITIBA</td>
+<td align="left">S</td>
+</tr>
+<tr class="odd">
+<td align="left">PE</td>
+<td align="left">PERNAMBUCO</td>
+<td align="left">RECIFE</td>
+<td align="left">NE</td>
+</tr>
+<tr class="even">
+<td align="left">PI</td>
+<td align="left">PIAUI</td>
+<td align="left">TERESINA</td>
+<td align="left">NE</td>
+</tr>
+<tr class="odd">
+<td align="left">RJ</td>
+<td align="left">RIO DE JANEIRO</td>
+<td align="left">RIO DE JANEIRO</td>
+<td align="left">SE</td>
+</tr>
+<tr class="even">
+<td align="left">RN</td>
+<td align="left">RIO GRANDE DO NORTE</td>
+<td align="left">NATAL</td>
+<td align="left">NE</td>
+</tr>
+<tr class="odd">
+<td align="left">RS</td>
+<td align="left">RIO GRANDE DO SUL</td>
+<td align="left">PORTO ALEGRE</td>
+<td align="left">S</td>
+</tr>
+<tr class="even">
+<td align="left">RO</td>
+<td align="left">RONDONIA</td>
+<td align="left">PORTO VELHO</td>
+<td align="left">N</td>
+</tr>
+<tr class="odd">
+<td align="left">RR</td>
+<td align="left">RORAIMA</td>
+<td align="left">BOA VISTA</td>
+<td align="left">N</td>
+</tr>
+<tr class="even">
+<td align="left">SC</td>
+<td align="left">SANTA CATARINA</td>
+<td align="left">FLORIANOPOLIS</td>
+<td align="left">S</td>
+</tr>
+<tr class="odd">
+<td align="left">SP</td>
+<td align="left">SAO PAULO</td>
+<td align="left">SAO PAULO</td>
+<td align="left">SE</td>
+</tr>
+<tr class="even">
+<td align="left">SE</td>
+<td align="left">SERGIPE</td>
+<td align="left">ARACAJU</td>
+<td align="left">NE</td>
+</tr>
+<tr class="odd">
+<td align="left">TO</td>
+<td align="left">TOCANTINS</td>
+<td align="left">PALMAS</td>
+<td align="left">N</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div id="caracteristicas-gerais" class="section level3">
 <h3>Características Gerais</h3>
@@ -393,296 +503,296 @@ kable(tabela)</code></pre>
 <ol start="2" style="list-style-type: decimal">
 <li>População e frota total, de automóveis e motocicletas da capitais</li>
 </ol>
-<pre class="r"><code>tabela &lt;- filter(dados,MUNICIPIO %in% estados$CAPITAL) %&gt;% 
-        mutate(CAPITAL = MUNICIPIO) %&gt;%
-        select (CAPITAL,UF,POPULACAO,TOTAL,AUTOMOVEL) %&gt;%
-        mutate (APM = 1000*AUTOMOVEL/POPULACAO) %&gt;%
-        arrange (desc(APM))
+<pre class="r"><code>tabela &lt;- filter(dados, str_c(UF,MUNICIPIO,sep='-') %in% 
+                         str_c(estados$SIGLA,estados$CAPITAL,sep='-')) %&gt;%
+        mutate(APM = 1000 * AUTOMOVEL/POPULACAO) %&gt;%
+        mutate(MPM = 1000 * MOTOCICLETA/POPULACAO) %&gt;%
+        select(UF,MUNICIPIO,POPULACAO,TOTAL,AUTOMOVEL,APM,MOTOCICLETA,MPM)
 
 kable(tabela)</code></pre>
 <table>
 <thead>
 <tr class="header">
-<th align="left">CAPITAL</th>
 <th align="left">UF</th>
+<th align="left">MUNICIPIO</th>
 <th align="right">POPULACAO</th>
 <th align="right">TOTAL</th>
 <th align="right">AUTOMOVEL</th>
 <th align="right">APM</th>
+<th align="right">MOTOCICLETA</th>
+<th align="right">MPM</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">CURITIBA</td>
-<td align="left">PR</td>
-<td align="right">1848946</td>
-<td align="right">1429534</td>
-<td align="right">1000903</td>
-<td align="right">541</td>
-</tr>
-<tr class="even">
-<td align="left">FLORIANOPOLIS</td>
-<td align="left">SC</td>
-<td align="right">453285</td>
-<td align="right">305028</td>
-<td align="right">206845</td>
-<td align="right">456</td>
-</tr>
-<tr class="odd">
-<td align="left">BELO HORIZONTE</td>
-<td align="left">MG</td>
-<td align="right">2479165</td>
-<td align="right">1596081</td>
-<td align="right">1101919</td>
-<td align="right">444</td>
-</tr>
-<tr class="even">
-<td align="left">SAO PAULO</td>
-<td align="left">SP</td>
-<td align="right">11821873</td>
-<td align="right">7010508</td>
-<td align="right">4971813</td>
-<td align="right">421</td>
-</tr>
-<tr class="odd">
-<td align="left">GOIANIA</td>
-<td align="left">GO</td>
-<td align="right">1393575</td>
-<td align="right">1045796</td>
-<td align="right">564554</td>
-<td align="right">405</td>
-</tr>
-<tr class="even">
-<td align="left">BRASILIA</td>
-<td align="left">DF</td>
-<td align="right">2789761</td>
-<td align="right">1511110</td>
-<td align="right">1099719</td>
-<td align="right">394</td>
-</tr>
-<tr class="odd">
-<td align="left">PORTO ALEGRE</td>
-<td align="left">RS</td>
-<td align="right">1467816</td>
-<td align="right">802932</td>
-<td align="right">571299</td>
-<td align="right">389</td>
-</tr>
-<tr class="even">
-<td align="left">VITORIA</td>
-<td align="left">ES</td>
-<td align="right">348268</td>
-<td align="right">185427</td>
-<td align="right">122229</td>
-<td align="right">351</td>
-</tr>
-<tr class="odd">
-<td align="left">CUIABA</td>
-<td align="left">MT</td>
-<td align="right">569830</td>
-<td align="right">344189</td>
-<td align="right">178035</td>
-<td align="right">312</td>
-</tr>
-<tr class="even">
-<td align="left">CAMPO GRANDE</td>
-<td align="left">MS</td>
-<td align="right">832352</td>
-<td align="right">483039</td>
-<td align="right">248372</td>
-<td align="right">298</td>
-</tr>
-<tr class="odd">
-<td align="left">RIO DE JANEIRO</td>
-<td align="left">RJ</td>
-<td align="right">6429923</td>
-<td align="right">2451155</td>
-<td align="right">1824803</td>
-<td align="right">284</td>
-</tr>
-<tr class="even">
-<td align="left">ARACAJU</td>
-<td align="left">SE</td>
-<td align="right">614577</td>
-<td align="right">257261</td>
-<td align="right">154271</td>
-<td align="right">251</td>
-</tr>
-<tr class="odd">
-<td align="left">PALMAS</td>
-<td align="left">PR</td>
-<td align="right">46294</td>
-<td align="right">17898</td>
-<td align="right">10991</td>
-<td align="right">237</td>
-</tr>
-<tr class="even">
-<td align="left">NATAL</td>
-<td align="left">RN</td>
-<td align="right">853928</td>
-<td align="right">339429</td>
-<td align="right">200312</td>
-<td align="right">235</td>
-</tr>
-<tr class="odd">
-<td align="left">PALMAS</td>
-<td align="left">TO</td>
-<td align="right">257904</td>
-<td align="right">144562</td>
-<td align="right">60132</td>
-<td align="right">233</td>
-</tr>
-<tr class="even">
-<td align="left">RECIFE</td>
-<td align="left">PE</td>
-<td align="right">1599513</td>
-<td align="right">609765</td>
-<td align="right">371833</td>
-<td align="right">232</td>
-</tr>
-<tr class="odd">
-<td align="left">JOAO PESSOA</td>
-<td align="left">PB</td>
-<td align="right">769607</td>
-<td align="right">298796</td>
-<td align="right">172667</td>
-<td align="right">224</td>
-</tr>
-<tr class="even">
-<td align="left">FORTALEZA</td>
-<td align="left">CE</td>
-<td align="right">2551806</td>
-<td align="right">908074</td>
-<td align="right">511109</td>
-<td align="right">200</td>
-</tr>
-<tr class="odd">
-<td align="left">TERESINA</td>
-<td align="left">PI</td>
-<td align="right">836475</td>
-<td align="right">380576</td>
-<td align="right">166131</td>
-<td align="right">199</td>
-</tr>
-<tr class="even">
-<td align="left">PORTO VELHO</td>
-<td align="left">RO</td>
-<td align="right">484992</td>
-<td align="right">222218</td>
-<td align="right">92648</td>
-<td align="right">191</td>
-</tr>
-<tr class="odd">
-<td align="left">SALVADOR</td>
-<td align="left">BA</td>
-<td align="right">2883682</td>
-<td align="right">785257</td>
-<td align="right">533990</td>
-<td align="right">185</td>
-</tr>
-<tr class="even">
-<td align="left">SAO LUIS</td>
-<td align="left">MA</td>
-<td align="right">1053922</td>
-<td align="right">327808</td>
-<td align="right">177176</td>
-<td align="right">168</td>
-</tr>
-<tr class="odd">
-<td align="left">MACEIO</td>
-<td align="left">AL</td>
-<td align="right">996733</td>
-<td align="right">266465</td>
-<td align="right">161275</td>
-<td align="right">162</td>
-</tr>
-<tr class="even">
-<td align="left">BOA VISTA</td>
-<td align="left">RR</td>
-<td align="right">308996</td>
-<td align="right">145678</td>
-<td align="right">49527</td>
-<td align="right">160</td>
-</tr>
-<tr class="odd">
-<td align="left">MANAUS</td>
-<td align="left">AM</td>
-<td align="right">1982177</td>
-<td align="right">581179</td>
-<td align="right">311179</td>
-<td align="right">157</td>
-</tr>
-<tr class="even">
-<td align="left">RIO BRANCO</td>
 <td align="left">AC</td>
+<td align="left">RIO BRANCO</td>
 <td align="right">357194</td>
 <td align="right">139683</td>
 <td align="right">53215</td>
 <td align="right">149</td>
-</tr>
-<tr class="odd">
-<td align="left">BELEM</td>
-<td align="left">PA</td>
-<td align="right">1425922</td>
-<td align="right">373846</td>
-<td align="right">204801</td>
-<td align="right">144</td>
+<td align="right">53553</td>
+<td align="right">150</td>
 </tr>
 <tr class="even">
-<td align="left">MACAPA</td>
+<td align="left">AL</td>
+<td align="left">MACEIO</td>
+<td align="right">996733</td>
+<td align="right">266465</td>
+<td align="right">161275</td>
+<td align="right">162</td>
+<td align="right">51637</td>
+<td align="right">52</td>
+</tr>
+<tr class="odd">
+<td align="left">AM</td>
+<td align="left">MANAUS</td>
+<td align="right">1982177</td>
+<td align="right">581179</td>
+<td align="right">311179</td>
+<td align="right">157</td>
+<td align="right">121656</td>
+<td align="right">61</td>
+</tr>
+<tr class="even">
 <td align="left">AP</td>
+<td align="left">MACAPA</td>
 <td align="right">437256</td>
 <td align="right">121519</td>
 <td align="right">52922</td>
 <td align="right">121</td>
+<td align="right">38673</td>
+<td align="right">88</td>
 </tr>
 <tr class="odd">
-<td align="left">RIO BRANCO</td>
-<td align="left">MT</td>
-<td align="right">5063</td>
-<td align="right">2421</td>
-<td align="right">534</td>
-<td align="right">105</td>
+<td align="left">BA</td>
+<td align="left">SALVADOR</td>
+<td align="right">2883682</td>
+<td align="right">785257</td>
+<td align="right">533990</td>
+<td align="right">185</td>
+<td align="right">105207</td>
+<td align="right">36</td>
 </tr>
 <tr class="even">
-<td align="left">BOA VISTA</td>
-<td align="left">PB</td>
-<td align="right">6669</td>
-<td align="right">1388</td>
-<td align="right">527</td>
-<td align="right">79</td>
+<td align="left">CE</td>
+<td align="left">FORTALEZA</td>
+<td align="right">2551806</td>
+<td align="right">908074</td>
+<td align="right">511109</td>
+<td align="right">200</td>
+<td align="right">229154</td>
+<td align="right">90</td>
 </tr>
 <tr class="odd">
+<td align="left">DF</td>
+<td align="left">BRASILIA</td>
+<td align="right">2789761</td>
+<td align="right">1511110</td>
+<td align="right">1099719</td>
+<td align="right">394</td>
+<td align="right">154277</td>
+<td align="right">55</td>
+</tr>
+<tr class="even">
+<td align="left">ES</td>
+<td align="left">VITORIA</td>
+<td align="right">348268</td>
+<td align="right">185427</td>
+<td align="right">122229</td>
+<td align="right">351</td>
+<td align="right">19861</td>
+<td align="right">57</td>
+</tr>
+<tr class="odd">
+<td align="left">GO</td>
+<td align="left">GOIANIA</td>
+<td align="right">1393575</td>
+<td align="right">1045796</td>
+<td align="right">564554</td>
+<td align="right">405</td>
+<td align="right">206724</td>
+<td align="right">148</td>
+</tr>
+<tr class="even">
+<td align="left">MA</td>
+<td align="left">SAO LUIS</td>
+<td align="right">1053922</td>
+<td align="right">327808</td>
+<td align="right">177176</td>
+<td align="right">168</td>
+<td align="right">78601</td>
+<td align="right">75</td>
+</tr>
+<tr class="odd">
+<td align="left">MG</td>
+<td align="left">BELO HORIZONTE</td>
+<td align="right">2479165</td>
+<td align="right">1596081</td>
+<td align="right">1101919</td>
+<td align="right">444</td>
+<td align="right">197150</td>
+<td align="right">80</td>
+</tr>
+<tr class="even">
+<td align="left">MS</td>
+<td align="left">CAMPO GRANDE</td>
+<td align="right">832352</td>
+<td align="right">483039</td>
+<td align="right">248372</td>
+<td align="right">298</td>
+<td align="right">114443</td>
+<td align="right">137</td>
+</tr>
+<tr class="odd">
+<td align="left">MT</td>
+<td align="left">CUIABA</td>
+<td align="right">569830</td>
+<td align="right">344189</td>
+<td align="right">178035</td>
+<td align="right">312</td>
+<td align="right">74171</td>
+<td align="right">130</td>
+</tr>
+<tr class="even">
+<td align="left">PA</td>
 <td align="left">BELEM</td>
+<td align="right">1425922</td>
+<td align="right">373846</td>
+<td align="right">204801</td>
+<td align="right">144</td>
+<td align="right">88211</td>
+<td align="right">62</td>
+</tr>
+<tr class="odd">
 <td align="left">PB</td>
-<td align="right">17495</td>
-<td align="right">2829</td>
-<td align="right">1218</td>
+<td align="left">JOAO PESSOA</td>
+<td align="right">769607</td>
+<td align="right">298796</td>
+<td align="right">172667</td>
+<td align="right">224</td>
+<td align="right">77126</td>
+<td align="right">100</td>
+</tr>
+<tr class="even">
+<td align="left">PE</td>
+<td align="left">RECIFE</td>
+<td align="right">1599513</td>
+<td align="right">609765</td>
+<td align="right">371833</td>
+<td align="right">232</td>
+<td align="right">119498</td>
+<td align="right">75</td>
+</tr>
+<tr class="odd">
+<td align="left">PI</td>
+<td align="left">TERESINA</td>
+<td align="right">836475</td>
+<td align="right">380576</td>
+<td align="right">166131</td>
+<td align="right">199</td>
+<td align="right">133767</td>
+<td align="right">160</td>
+</tr>
+<tr class="even">
+<td align="left">PR</td>
+<td align="left">CURITIBA</td>
+<td align="right">1848946</td>
+<td align="right">1429534</td>
+<td align="right">1000903</td>
+<td align="right">541</td>
+<td align="right">128882</td>
 <td align="right">70</td>
 </tr>
+<tr class="odd">
+<td align="left">RJ</td>
+<td align="left">RIO DE JANEIRO</td>
+<td align="right">6429923</td>
+<td align="right">2451155</td>
+<td align="right">1824803</td>
+<td align="right">284</td>
+<td align="right">238855</td>
+<td align="right">37</td>
+</tr>
 <tr class="even">
-<td align="left">BELEM</td>
-<td align="left">AL</td>
-<td align="right">4737</td>
-<td align="right">760</td>
-<td align="right">247</td>
-<td align="right">52</td>
+<td align="left">RN</td>
+<td align="left">NATAL</td>
+<td align="right">853928</td>
+<td align="right">339429</td>
+<td align="right">200312</td>
+<td align="right">235</td>
+<td align="right">76403</td>
+<td align="right">89</td>
 </tr>
 <tr class="odd">
-<td align="left">CAMPO GRANDE</td>
-<td align="left">RN</td>
-<td align="right">9660</td>
-<td align="right">1666</td>
-<td align="right">390</td>
-<td align="right">40</td>
+<td align="left">RO</td>
+<td align="left">PORTO VELHO</td>
+<td align="right">484992</td>
+<td align="right">222218</td>
+<td align="right">92648</td>
+<td align="right">191</td>
+<td align="right">71455</td>
+<td align="right">147</td>
 </tr>
 <tr class="even">
-<td align="left">CAMPO GRANDE</td>
-<td align="left">AL</td>
-<td align="right">9631</td>
-<td align="right">1604</td>
-<td align="right">341</td>
-<td align="right">35</td>
+<td align="left">RR</td>
+<td align="left">BOA VISTA</td>
+<td align="right">308996</td>
+<td align="right">145678</td>
+<td align="right">49527</td>
+<td align="right">160</td>
+<td align="right">54343</td>
+<td align="right">176</td>
+</tr>
+<tr class="odd">
+<td align="left">RS</td>
+<td align="left">PORTO ALEGRE</td>
+<td align="right">1467816</td>
+<td align="right">802932</td>
+<td align="right">571299</td>
+<td align="right">389</td>
+<td align="right">83947</td>
+<td align="right">57</td>
+</tr>
+<tr class="even">
+<td align="left">SC</td>
+<td align="left">FLORIANOPOLIS</td>
+<td align="right">453285</td>
+<td align="right">305028</td>
+<td align="right">206845</td>
+<td align="right">456</td>
+<td align="right">41553</td>
+<td align="right">92</td>
+</tr>
+<tr class="odd">
+<td align="left">SE</td>
+<td align="left">ARACAJU</td>
+<td align="right">614577</td>
+<td align="right">257261</td>
+<td align="right">154271</td>
+<td align="right">251</td>
+<td align="right">50421</td>
+<td align="right">82</td>
+</tr>
+<tr class="even">
+<td align="left">SP</td>
+<td align="left">SAO PAULO</td>
+<td align="right">11821873</td>
+<td align="right">7010508</td>
+<td align="right">4971813</td>
+<td align="right">421</td>
+<td align="right">799411</td>
+<td align="right">68</td>
+</tr>
+<tr class="odd">
+<td align="left">TO</td>
+<td align="left">PALMAS</td>
+<td align="right">257904</td>
+<td align="right">144562</td>
+<td align="right">60132</td>
+<td align="right">233</td>
+<td align="right">38772</td>
+<td align="right">150</td>
 </tr>
 </tbody>
 </table>
