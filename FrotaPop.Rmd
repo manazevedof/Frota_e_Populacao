@@ -13,9 +13,8 @@ output:
 ```{r, message=FALSE, warning=FALSE}
 library(data.table)
 library(dplyr)
-library(pander)
-library(knitr)
 library(stringr)
+library(knitr)
 options(scipen=1, digits=2, width=120)
 ```
 
@@ -26,9 +25,6 @@ dados <- fread('FrotaBR122013.csv',sep=';')
 estados <- fread('estados.csv',sep=';')
 estados <- mutate(estados,CAPITAL=str_trim(CAPITAL))
 estados <- mutate(estados,ESTADO=str_trim(ESTADO))
-str(dados)
-str(estados)
-estados
 ```
 
 ###Características Gerais
@@ -49,11 +45,11 @@ kable(tabela)
 2. População e frota total, de automóveis e motocicletas da capitais
 
 ```{r}
-tabela <- filter(dados,MUNICIPIO %in% estados$CAPITAL) %>% 
-        mutate(CAPITAL = MUNICIPIO) %>%
-        select (CAPITAL,UF,POPULACAO,TOTAL,AUTOMOVEL) %>%
-        mutate (APM = 1000*AUTOMOVEL/POPULACAO) %>%
-        arrange (desc(APM))
+tabela <- filter(dados, str_c(UF,MUNICIPIO,sep='-') %in% 
+                         str_c(estados$SIGLA,estados$CAPITAL,sep='-')) %>%
+        mutate(APM = 1000 * AUTOMOVEL/POPULACAO) %>%
+        mutate(MPM = 1000 * MOTOCICLETA/POPULACAO) %>%
+        select(UF,MUNICIPIO,POPULACAO,TOTAL,AUTOMOVEL,APM,MOTOCICLETA,MPM)
 
 kable(tabela)
 ```

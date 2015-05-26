@@ -8,8 +8,8 @@ Sunday, May 24, 2015
 ```r
 library(data.table)
 library(dplyr)
-library(knitr)
 library(stringr)
+library(knitr)
 options(scipen=1, digits=2, width=120)
 ```
 
@@ -21,40 +21,7 @@ dados <- fread('FrotaBR122013.csv',sep=';')
 estados <- fread('estados.csv',sep=';')
 estados <- mutate(estados,CAPITAL=str_trim(CAPITAL))
 estados <- mutate(estados,ESTADO=str_trim(ESTADO))
-kable(group_by(estados,REGIAO))
 ```
-
-
-
-SIGLA   ESTADO                CAPITAL          REGIAO 
-------  --------------------  ---------------  -------
-AC      ACRE                  RIO BRANCO       N      
-AL      ALAGOAS               MACEIO           NE     
-AP      AMAPA                 MACAPA           N      
-AM      AMAZONAS              MANAUS           N      
-BA      BAHIA                 SALVADOR         NE     
-CE      CEARA                 FORTALEZA        NE     
-DF      DISTRITO FEDERAL      BRASILIA         CO     
-ES      ESPIRITO SANTO        VITORIA          SE     
-GO      GOIAS                 GOIANIA          CO     
-MA      MARANHAO              SAO LUIS         NE     
-MT      MATO GROSSO           CUIABA           CO     
-MS      MATO GROSSO DO SUL    CAMPO GRANDE     CO     
-MG      MINAS GERAIS          BELO HORIZONTE   SE     
-PA      PARA                  BELEM            N      
-PB      PARAIBA               JOAO PESSOA      NE     
-PR      PARANA                CURITIBA         S      
-PE      PERNAMBUCO            RECIFE           NE     
-PI      PIAUI                 TERESINA         NE     
-RJ      RIO DE JANEIRO        RIO DE JANEIRO   SE     
-RN      RIO GRANDE DO NORTE   NATAL            NE     
-RS      RIO GRANDE DO SUL     PORTO ALEGRE     S      
-RO      RONDONIA              PORTO VELHO      N      
-RR      RORAIMA               BOA VISTA        N      
-SC      SANTA CATARINA        FLORIANOPOLIS    S      
-SP      SAO PAULO             SAO PAULO        SE     
-SE      SERGIPE               ARACAJU          NE     
-TO      TOCANTINS             PALMAS           N      
 
 ###Características Gerais
 
