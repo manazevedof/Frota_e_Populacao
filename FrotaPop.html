@@ -73,14 +73,17 @@ img {
 library(dplyr)
 library(stringr)
 library(knitr)
-options(scipen=1, digits=2, width=120)</code></pre>
+options(scipen=1, digits=2, width=105)</code></pre>
 </div>
 <div id="lendo-os-dados" class="section level3">
 <h3>Lendo os dados</h3>
 <pre class="r"><code>dados &lt;- fread('FrotaBR122013.csv',sep=';')
 estados &lt;- fread('estados.csv',sep=';')
 estados &lt;- mutate(estados,CAPITAL=str_trim(CAPITAL))
-estados &lt;- mutate(estados,ESTADO=str_trim(ESTADO))</code></pre>
+estados &lt;- mutate(estados,ESTADO=str_trim(ESTADO))
+setkey(dados,UF)
+setkey(estados,SIGLA)
+dados &lt;- select(dados[estados],-c(ESTADO,CAPITAL))</code></pre>
 </div>
 <div id="caracteristicas-gerais" class="section level3">
 <h3>Características Gerais</h3>
@@ -326,13 +329,14 @@ kable(tabela)</code></pre>
 </tbody>
 </table>
 <ol start="2" style="list-style-type: decimal">
-<li>População e frota total, de automóveis e motocicletas da capitais</li>
+<li>População e frota total, de automóveis e motocicletas das capitais</li>
 </ol>
 <pre class="r"><code>tabela &lt;- filter(dados, str_c(UF,MUNICIPIO,sep='-') %in% 
                          str_c(estados$SIGLA,estados$CAPITAL,sep='-')) %&gt;%
         mutate(APM = 1000 * AUTOMOVEL/POPULACAO) %&gt;%
         mutate(MPM = 1000 * MOTOCICLETA/POPULACAO) %&gt;%
-        select(UF,MUNICIPIO,POPULACAO,TOTAL,AUTOMOVEL,APM,MOTOCICLETA,MPM)
+        select(UF,MUNICIPIO,POPULACAO,TOTAL,AUTOMOVEL,APM,MOTOCICLETA,MPM) %&gt;%
+        arrange(desc(APM))
 
 kable(tabela)</code></pre>
 <table>
@@ -350,176 +354,6 @@ kable(tabela)</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">AC</td>
-<td align="left">RIO BRANCO</td>
-<td align="right">357194</td>
-<td align="right">139683</td>
-<td align="right">53215</td>
-<td align="right">149</td>
-<td align="right">53553</td>
-<td align="right">150</td>
-</tr>
-<tr class="even">
-<td align="left">AL</td>
-<td align="left">MACEIO</td>
-<td align="right">996733</td>
-<td align="right">266465</td>
-<td align="right">161275</td>
-<td align="right">162</td>
-<td align="right">51637</td>
-<td align="right">52</td>
-</tr>
-<tr class="odd">
-<td align="left">AM</td>
-<td align="left">MANAUS</td>
-<td align="right">1982177</td>
-<td align="right">581179</td>
-<td align="right">311179</td>
-<td align="right">157</td>
-<td align="right">121656</td>
-<td align="right">61</td>
-</tr>
-<tr class="even">
-<td align="left">AP</td>
-<td align="left">MACAPA</td>
-<td align="right">437256</td>
-<td align="right">121519</td>
-<td align="right">52922</td>
-<td align="right">121</td>
-<td align="right">38673</td>
-<td align="right">88</td>
-</tr>
-<tr class="odd">
-<td align="left">BA</td>
-<td align="left">SALVADOR</td>
-<td align="right">2883682</td>
-<td align="right">785257</td>
-<td align="right">533990</td>
-<td align="right">185</td>
-<td align="right">105207</td>
-<td align="right">36</td>
-</tr>
-<tr class="even">
-<td align="left">CE</td>
-<td align="left">FORTALEZA</td>
-<td align="right">2551806</td>
-<td align="right">908074</td>
-<td align="right">511109</td>
-<td align="right">200</td>
-<td align="right">229154</td>
-<td align="right">90</td>
-</tr>
-<tr class="odd">
-<td align="left">DF</td>
-<td align="left">BRASILIA</td>
-<td align="right">2789761</td>
-<td align="right">1511110</td>
-<td align="right">1099719</td>
-<td align="right">394</td>
-<td align="right">154277</td>
-<td align="right">55</td>
-</tr>
-<tr class="even">
-<td align="left">ES</td>
-<td align="left">VITORIA</td>
-<td align="right">348268</td>
-<td align="right">185427</td>
-<td align="right">122229</td>
-<td align="right">351</td>
-<td align="right">19861</td>
-<td align="right">57</td>
-</tr>
-<tr class="odd">
-<td align="left">GO</td>
-<td align="left">GOIANIA</td>
-<td align="right">1393575</td>
-<td align="right">1045796</td>
-<td align="right">564554</td>
-<td align="right">405</td>
-<td align="right">206724</td>
-<td align="right">148</td>
-</tr>
-<tr class="even">
-<td align="left">MA</td>
-<td align="left">SAO LUIS</td>
-<td align="right">1053922</td>
-<td align="right">327808</td>
-<td align="right">177176</td>
-<td align="right">168</td>
-<td align="right">78601</td>
-<td align="right">75</td>
-</tr>
-<tr class="odd">
-<td align="left">MG</td>
-<td align="left">BELO HORIZONTE</td>
-<td align="right">2479165</td>
-<td align="right">1596081</td>
-<td align="right">1101919</td>
-<td align="right">444</td>
-<td align="right">197150</td>
-<td align="right">80</td>
-</tr>
-<tr class="even">
-<td align="left">MS</td>
-<td align="left">CAMPO GRANDE</td>
-<td align="right">832352</td>
-<td align="right">483039</td>
-<td align="right">248372</td>
-<td align="right">298</td>
-<td align="right">114443</td>
-<td align="right">137</td>
-</tr>
-<tr class="odd">
-<td align="left">MT</td>
-<td align="left">CUIABA</td>
-<td align="right">569830</td>
-<td align="right">344189</td>
-<td align="right">178035</td>
-<td align="right">312</td>
-<td align="right">74171</td>
-<td align="right">130</td>
-</tr>
-<tr class="even">
-<td align="left">PA</td>
-<td align="left">BELEM</td>
-<td align="right">1425922</td>
-<td align="right">373846</td>
-<td align="right">204801</td>
-<td align="right">144</td>
-<td align="right">88211</td>
-<td align="right">62</td>
-</tr>
-<tr class="odd">
-<td align="left">PB</td>
-<td align="left">JOAO PESSOA</td>
-<td align="right">769607</td>
-<td align="right">298796</td>
-<td align="right">172667</td>
-<td align="right">224</td>
-<td align="right">77126</td>
-<td align="right">100</td>
-</tr>
-<tr class="even">
-<td align="left">PE</td>
-<td align="left">RECIFE</td>
-<td align="right">1599513</td>
-<td align="right">609765</td>
-<td align="right">371833</td>
-<td align="right">232</td>
-<td align="right">119498</td>
-<td align="right">75</td>
-</tr>
-<tr class="odd">
-<td align="left">PI</td>
-<td align="left">TERESINA</td>
-<td align="right">836475</td>
-<td align="right">380576</td>
-<td align="right">166131</td>
-<td align="right">199</td>
-<td align="right">133767</td>
-<td align="right">160</td>
-</tr>
-<tr class="even">
 <td align="left">PR</td>
 <td align="left">CURITIBA</td>
 <td align="right">1848946</td>
@@ -528,56 +362,6 @@ kable(tabela)</code></pre>
 <td align="right">541</td>
 <td align="right">128882</td>
 <td align="right">70</td>
-</tr>
-<tr class="odd">
-<td align="left">RJ</td>
-<td align="left">RIO DE JANEIRO</td>
-<td align="right">6429923</td>
-<td align="right">2451155</td>
-<td align="right">1824803</td>
-<td align="right">284</td>
-<td align="right">238855</td>
-<td align="right">37</td>
-</tr>
-<tr class="even">
-<td align="left">RN</td>
-<td align="left">NATAL</td>
-<td align="right">853928</td>
-<td align="right">339429</td>
-<td align="right">200312</td>
-<td align="right">235</td>
-<td align="right">76403</td>
-<td align="right">89</td>
-</tr>
-<tr class="odd">
-<td align="left">RO</td>
-<td align="left">PORTO VELHO</td>
-<td align="right">484992</td>
-<td align="right">222218</td>
-<td align="right">92648</td>
-<td align="right">191</td>
-<td align="right">71455</td>
-<td align="right">147</td>
-</tr>
-<tr class="even">
-<td align="left">RR</td>
-<td align="left">BOA VISTA</td>
-<td align="right">308996</td>
-<td align="right">145678</td>
-<td align="right">49527</td>
-<td align="right">160</td>
-<td align="right">54343</td>
-<td align="right">176</td>
-</tr>
-<tr class="odd">
-<td align="left">RS</td>
-<td align="left">PORTO ALEGRE</td>
-<td align="right">1467816</td>
-<td align="right">802932</td>
-<td align="right">571299</td>
-<td align="right">389</td>
-<td align="right">83947</td>
-<td align="right">57</td>
 </tr>
 <tr class="even">
 <td align="left">SC</td>
@@ -590,14 +374,14 @@ kable(tabela)</code></pre>
 <td align="right">92</td>
 </tr>
 <tr class="odd">
-<td align="left">SE</td>
-<td align="left">ARACAJU</td>
-<td align="right">614577</td>
-<td align="right">257261</td>
-<td align="right">154271</td>
-<td align="right">251</td>
-<td align="right">50421</td>
-<td align="right">82</td>
+<td align="left">MG</td>
+<td align="left">BELO HORIZONTE</td>
+<td align="right">2479165</td>
+<td align="right">1596081</td>
+<td align="right">1101919</td>
+<td align="right">444</td>
+<td align="right">197150</td>
+<td align="right">80</td>
 </tr>
 <tr class="even">
 <td align="left">SP</td>
@@ -610,6 +394,96 @@ kable(tabela)</code></pre>
 <td align="right">68</td>
 </tr>
 <tr class="odd">
+<td align="left">GO</td>
+<td align="left">GOIANIA</td>
+<td align="right">1393575</td>
+<td align="right">1045796</td>
+<td align="right">564554</td>
+<td align="right">405</td>
+<td align="right">206724</td>
+<td align="right">148</td>
+</tr>
+<tr class="even">
+<td align="left">DF</td>
+<td align="left">BRASILIA</td>
+<td align="right">2789761</td>
+<td align="right">1511110</td>
+<td align="right">1099719</td>
+<td align="right">394</td>
+<td align="right">154277</td>
+<td align="right">55</td>
+</tr>
+<tr class="odd">
+<td align="left">RS</td>
+<td align="left">PORTO ALEGRE</td>
+<td align="right">1467816</td>
+<td align="right">802932</td>
+<td align="right">571299</td>
+<td align="right">389</td>
+<td align="right">83947</td>
+<td align="right">57</td>
+</tr>
+<tr class="even">
+<td align="left">ES</td>
+<td align="left">VITORIA</td>
+<td align="right">348268</td>
+<td align="right">185427</td>
+<td align="right">122229</td>
+<td align="right">351</td>
+<td align="right">19861</td>
+<td align="right">57</td>
+</tr>
+<tr class="odd">
+<td align="left">MT</td>
+<td align="left">CUIABA</td>
+<td align="right">569830</td>
+<td align="right">344189</td>
+<td align="right">178035</td>
+<td align="right">312</td>
+<td align="right">74171</td>
+<td align="right">130</td>
+</tr>
+<tr class="even">
+<td align="left">MS</td>
+<td align="left">CAMPO GRANDE</td>
+<td align="right">832352</td>
+<td align="right">483039</td>
+<td align="right">248372</td>
+<td align="right">298</td>
+<td align="right">114443</td>
+<td align="right">137</td>
+</tr>
+<tr class="odd">
+<td align="left">RJ</td>
+<td align="left">RIO DE JANEIRO</td>
+<td align="right">6429923</td>
+<td align="right">2451155</td>
+<td align="right">1824803</td>
+<td align="right">284</td>
+<td align="right">238855</td>
+<td align="right">37</td>
+</tr>
+<tr class="even">
+<td align="left">SE</td>
+<td align="left">ARACAJU</td>
+<td align="right">614577</td>
+<td align="right">257261</td>
+<td align="right">154271</td>
+<td align="right">251</td>
+<td align="right">50421</td>
+<td align="right">82</td>
+</tr>
+<tr class="odd">
+<td align="left">RN</td>
+<td align="left">NATAL</td>
+<td align="right">853928</td>
+<td align="right">339429</td>
+<td align="right">200312</td>
+<td align="right">235</td>
+<td align="right">76403</td>
+<td align="right">89</td>
+</tr>
+<tr class="even">
 <td align="left">TO</td>
 <td align="left">PALMAS</td>
 <td align="right">257904</td>
@@ -619,8 +493,218 @@ kable(tabela)</code></pre>
 <td align="right">38772</td>
 <td align="right">150</td>
 </tr>
+<tr class="odd">
+<td align="left">PE</td>
+<td align="left">RECIFE</td>
+<td align="right">1599513</td>
+<td align="right">609765</td>
+<td align="right">371833</td>
+<td align="right">232</td>
+<td align="right">119498</td>
+<td align="right">75</td>
+</tr>
+<tr class="even">
+<td align="left">PB</td>
+<td align="left">JOAO PESSOA</td>
+<td align="right">769607</td>
+<td align="right">298796</td>
+<td align="right">172667</td>
+<td align="right">224</td>
+<td align="right">77126</td>
+<td align="right">100</td>
+</tr>
+<tr class="odd">
+<td align="left">CE</td>
+<td align="left">FORTALEZA</td>
+<td align="right">2551806</td>
+<td align="right">908074</td>
+<td align="right">511109</td>
+<td align="right">200</td>
+<td align="right">229154</td>
+<td align="right">90</td>
+</tr>
+<tr class="even">
+<td align="left">PI</td>
+<td align="left">TERESINA</td>
+<td align="right">836475</td>
+<td align="right">380576</td>
+<td align="right">166131</td>
+<td align="right">199</td>
+<td align="right">133767</td>
+<td align="right">160</td>
+</tr>
+<tr class="odd">
+<td align="left">RO</td>
+<td align="left">PORTO VELHO</td>
+<td align="right">484992</td>
+<td align="right">222218</td>
+<td align="right">92648</td>
+<td align="right">191</td>
+<td align="right">71455</td>
+<td align="right">147</td>
+</tr>
+<tr class="even">
+<td align="left">BA</td>
+<td align="left">SALVADOR</td>
+<td align="right">2883682</td>
+<td align="right">785257</td>
+<td align="right">533990</td>
+<td align="right">185</td>
+<td align="right">105207</td>
+<td align="right">36</td>
+</tr>
+<tr class="odd">
+<td align="left">MA</td>
+<td align="left">SAO LUIS</td>
+<td align="right">1053922</td>
+<td align="right">327808</td>
+<td align="right">177176</td>
+<td align="right">168</td>
+<td align="right">78601</td>
+<td align="right">75</td>
+</tr>
+<tr class="even">
+<td align="left">AL</td>
+<td align="left">MACEIO</td>
+<td align="right">996733</td>
+<td align="right">266465</td>
+<td align="right">161275</td>
+<td align="right">162</td>
+<td align="right">51637</td>
+<td align="right">52</td>
+</tr>
+<tr class="odd">
+<td align="left">RR</td>
+<td align="left">BOA VISTA</td>
+<td align="right">308996</td>
+<td align="right">145678</td>
+<td align="right">49527</td>
+<td align="right">160</td>
+<td align="right">54343</td>
+<td align="right">176</td>
+</tr>
+<tr class="even">
+<td align="left">AM</td>
+<td align="left">MANAUS</td>
+<td align="right">1982177</td>
+<td align="right">581179</td>
+<td align="right">311179</td>
+<td align="right">157</td>
+<td align="right">121656</td>
+<td align="right">61</td>
+</tr>
+<tr class="odd">
+<td align="left">AC</td>
+<td align="left">RIO BRANCO</td>
+<td align="right">357194</td>
+<td align="right">139683</td>
+<td align="right">53215</td>
+<td align="right">149</td>
+<td align="right">53553</td>
+<td align="right">150</td>
+</tr>
+<tr class="even">
+<td align="left">PA</td>
+<td align="left">BELEM</td>
+<td align="right">1425922</td>
+<td align="right">373846</td>
+<td align="right">204801</td>
+<td align="right">144</td>
+<td align="right">88211</td>
+<td align="right">62</td>
+</tr>
+<tr class="odd">
+<td align="left">AP</td>
+<td align="left">MACAPA</td>
+<td align="right">437256</td>
+<td align="right">121519</td>
+<td align="right">52922</td>
+<td align="right">121</td>
+<td align="right">38673</td>
+<td align="right">88</td>
+</tr>
 </tbody>
 </table>
+<pre class="r"><code>barplot(tabela$APM,names.arg=tabela$MUNICIPIO,
+        ylab='Veiculos por 1000 habitantes',space=1)</code></pre>
+<p><img src="data:image/png;base64,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" /></p>
+<ol start="3" style="list-style-type: decimal">
+<li>População e frota total, de automóveis e motocicletas das regiões</li>
+</ol>
+<pre class="r"><code>tabela &lt;- group_by(dados,REGIAO) %&gt;%
+                summarise(Populacao = sum(POPULACAO),
+                  Veiculos = sum(TOTAL),
+                  Automoveis = sum(AUTOMOVEL),
+                  Motocicletas = sum(MOTOCICLETA)) %&gt;%
+        mutate(APM = 1000 * Automoveis/Populacao) %&gt;%
+        mutate(MPM = 1000 * Motocicletas/Populacao) %&gt;%
+        select(REGIAO,Populacao,Veiculos,Automoveis,APM,Motocicletas,MPM) %&gt;%
+        arrange(desc(APM))
+        
+kable(tabela)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">REGIAO</th>
+<th align="right">Populacao</th>
+<th align="right">Veiculos</th>
+<th align="right">Automoveis</th>
+<th align="right">APM</th>
+<th align="right">Motocicletas</th>
+<th align="right">MPM</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">S</td>
+<td align="right">28795762</td>
+<td align="right">16437821</td>
+<td align="right">9810506</td>
+<td align="right">341</td>
+<td align="right">2733632</td>
+<td align="right">95</td>
+</tr>
+<tr class="even">
+<td align="left">SE</td>
+<td align="right">84465570</td>
+<td align="right">40598454</td>
+<td align="right">25207047</td>
+<td align="right">298</td>
+<td align="right">7206323</td>
+<td align="right">85</td>
+</tr>
+<tr class="odd">
+<td align="left">CO</td>
+<td align="right">14993191</td>
+<td align="right">7499136</td>
+<td align="right">3736290</td>
+<td align="right">249</td>
+<td align="right">1706834</td>
+<td align="right">114</td>
+</tr>
+<tr class="even">
+<td align="left">NE</td>
+<td align="right">55794707</td>
+<td align="right">13126842</td>
+<td align="right">5352291</td>
+<td align="right">96</td>
+<td align="right">4985338</td>
+<td align="right">89</td>
+</tr>
+<tr class="odd">
+<td align="left">N</td>
+<td align="right">17013559</td>
+<td align="right">3938475</td>
+<td align="right">1338252</td>
+<td align="right">79</td>
+<td align="right">1482337</td>
+<td align="right">87</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>barplot(tabela$APM,names.arg=tabela$REGIAO,
+        ylab='Veiculos por 1000 habitantes')</code></pre>
+<p><img src="data:image/png;base64,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" /></p>
 </div>
 
 

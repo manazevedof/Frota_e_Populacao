@@ -15,7 +15,7 @@ library(data.table)
 library(dplyr)
 library(stringr)
 library(knitr)
-options(scipen=1, digits=2, width=120)
+options(scipen=1, digits=2, width=105)
 ```
 
 ###Lendo os dados
@@ -25,6 +25,9 @@ dados <- fread('FrotaBR122013.csv',sep=';')
 estados <- fread('estados.csv',sep=';')
 estados <- mutate(estados,CAPITAL=str_trim(CAPITAL))
 estados <- mutate(estados,ESTADO=str_trim(ESTADO))
+setkey(dados,UF)
+setkey(estados,SIGLA)
+dados <- select(dados[estados],-c(ESTADO,CAPITAL))
 ```
 
 ###Características Gerais
@@ -42,15 +45,36 @@ tabela <- group_by(dados,UF) %>%
 kable(tabela)
 ```
 
-2. População e frota total, de automóveis e motocicletas da capitais
+2. População e frota total, de automóveis e motocicletas das capitais
 
 ```{r}
 tabela <- filter(dados, str_c(UF,MUNICIPIO,sep='-') %in% 
                          str_c(estados$SIGLA,estados$CAPITAL,sep='-')) %>%
         mutate(APM = 1000 * AUTOMOVEL/POPULACAO) %>%
         mutate(MPM = 1000 * MOTOCICLETA/POPULACAO) %>%
-        select(UF,MUNICIPIO,POPULACAO,TOTAL,AUTOMOVEL,APM,MOTOCICLETA,MPM)
+        select(UF,MUNICIPIO,POPULACAO,TOTAL,AUTOMOVEL,APM,MOTOCICLETA,MPM) %>%
+        arrange(desc(APM))
 
 kable(tabela)
+barplot(tabela$APM,names.arg=tabela$MUNICIPIO,
+        ylab='Veiculos por 1000 habitantes',space=1)
+```
+
+3. População e frota total, de automóveis e motocicletas das regiões
+
+```{r}
+tabela <- group_by(dados,REGIAO) %>%
+                summarise(Populacao = sum(POPULACAO),
+                  Veiculos = sum(TOTAL),
+                  Automoveis = sum(AUTOMOVEL),
+                  Motocicletas = sum(MOTOCICLETA)) %>%
+        mutate(APM = 1000 * Automoveis/Populacao) %>%
+        mutate(MPM = 1000 * Motocicletas/Populacao) %>%
+        select(REGIAO,Populacao,Veiculos,Automoveis,APM,Motocicletas,MPM) %>%
+        arrange(desc(APM))
+        
+kable(tabela)
+barplot(tabela$APM,names.arg=tabela$REGIAO,
+        ylab='Veiculos por 1000 habitantes')
 ```
 
