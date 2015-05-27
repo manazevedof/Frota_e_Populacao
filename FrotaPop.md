@@ -1,6 +1,6 @@
 # População e Frota de Veículos
 Mario Azevedo  
-Sunday, May 24, 2015  
+Domingo, 24/05/2015  
 
 ###Carregando as bibliotecas necessárias
 
@@ -10,10 +10,15 @@ library(data.table)
 library(dplyr)
 library(stringr)
 library(knitr)
+library(ggplot2)
+library(scales)
 options(scipen=1, digits=2, width=105)
 ```
 
 ###Lendo os dados
+
+Os dados da frota são de dezembro de 2013 (DENATRAN). Os dados de população são de outubro de 2013 (estimativa do IBGE).
+
 
 
 ```r
@@ -85,6 +90,24 @@ tabela <- filter(dados, str_c(UF,MUNICIPIO,sep='-') %in%
         select(UF,MUNICIPIO,POPULACAO,TOTAL,AUTOMOVEL,APM,MOTOCICLETA,MPM) %>%
         arrange(desc(APM))
 
+APMcap <- 1000 * sum(tabela$AUTOMOVEL)/sum(tabela$POPULACAO)
+APMcap
+```
+
+```
+## [1] 317
+```
+
+```r
+APMbr <- 1000 * sum(dados$AUTOMOVEL)/sum(dados$POPULACAO)
+APMbr
+```
+
+```
+## [1] 226
+```
+
+```r
 kable(tabela)
 ```
 
@@ -121,8 +144,14 @@ PA   BELEM               1425922    373846      204801   144         88211    62
 AP   MACAPA               437256    121519       52922   121         38673    88
 
 ```r
-barplot(tabela$APM,names.arg=tabela$MUNICIPIO,
-        ylab='Veiculos por 1000 habitantes',space=1)
+ordem <- reorder(tabela$MUNICIPIO,tabela$APM)
+ggplot(data=tabela, aes(x=ordem, y=APM)) +
+        geom_bar(stat="identity",fill="darkblue") +
+        coord_flip() +
+        geom_hline(aes(yintercept=APMcap),color="red") +
+        geom_hline(aes(yintercept=APMbr),color="green") +
+        xlab("Capitais") +
+        ylab("Automóveis por 1000 Habitantes")
 ```
 
 ![](FrotaPop_files/figure-html/unnamed-chunk-4-1.png) 
@@ -140,7 +169,8 @@ tabela <- group_by(dados,REGIAO) %>%
         mutate(MPM = 1000 * Motocicletas/Populacao) %>%
         select(REGIAO,Populacao,Veiculos,Automoveis,APM,Motocicletas,MPM) %>%
         arrange(desc(APM))
-        
+
+APMbr <- 1000 * sum(tabela$Automoveis)/sum(tabela$Populacao)
 kable(tabela)
 ```
 
@@ -155,8 +185,12 @@ NE         55794707   13126842      5352291    96        4985338    89
 N          17013559    3938475      1338252    79        1482337    87
 
 ```r
-barplot(tabela$APM,names.arg=tabela$REGIAO,
-        ylab='Veiculos por 1000 habitantes')
+ordem <- reorder(tabela$REGIAO,tabela$APM)
+ggplot(data=tabela, aes(x=ordem, y=APM)) +
+        geom_bar(stat="identity",fill="darkblue") +
+        geom_hline(aes(yintercept=APMbr),color="green") +
+        xlab("Regiões") +
+        ylab("Automóveis por 1000 Habitantes")
 ```
 
 ![](FrotaPop_files/figure-html/unnamed-chunk-5-1.png) 
