@@ -259,8 +259,7 @@ tabela <- mutate(dados,maismoto = (MOTOCICLETA>AUTOMOVEL)) %>%
                   MaisMoto = sum(maismoto),
                   percMun = 100 * sum(maismoto)/n())
 
-kable(tabela,caption = "Cidades com mais motocicletas do que automóveis, por estado",
-      digits=c(2,3,3,5))
+kable(tabela,caption = "Cidades com mais motocicletas do que automóveis, por estado")
 ```
 
 
@@ -300,3 +299,63 @@ TO     139        131     94.24
 7. Relação completa dos estados, destacando a frota de certos tipos de veículos e quanto isso representa em relação ao país.
 
 
+```r
+popBR <- sum(dados$POPULACAO)
+frotaBR <- sum(dados$TOTAL)
+autoBR <- sum(dados$AUTOMOVEL)
+oniBR <- sum(dados$ONIBUS)
+camBR <- sum(dados$CAMINHAO)
+tabela <- group_by(dados,UF) %>%
+        summarise(Populacao = sum(POPULACAO),
+                  percPop = 100 * sum(POPULACAO)/popBR,
+                  Automoveis = sum(AUTOMOVEL),
+                  percAuto = 100 * sum(AUTOMOVEL)/autoBR,
+                  Onibus = sum(ONIBUS),
+                  percOni = 100 * sum(ONIBUS)/oniBR,
+                  Caminhoes = sum(CAMINHAO),
+                  percCam = 100 * sum(CAMINHAO)/camBR)
+Brasil <- data.table(UF = 'TOTAL',
+                     Populacao = popBR,
+                     percPop = 100,
+                     Automoveis = autoBR,
+                     percAuto = 100,
+                     Onibus = oniBR,
+                     percOni = 100,
+                     Caminhoes = camBR,
+                     percCam = 100)
+tabela<-rbind(tabela,Brasil)
+kable(tabela,digits=1)
+```
+
+
+
+UF       Populacao   percPop   Automoveis   percAuto   Onibus   percOni   Caminhoes   percCam
+------  ----------  --------  -----------  ---------  -------  --------  ----------  --------
+AC         7.8e+05       0.4        67461        0.1      921       0.2        6297       0.3
+AL         3.3e+06       1.6       275556        0.6     6098       1.1       18949       0.8
+AM         3.8e+06       1.9       325698        0.7     8517       1.6       19023       0.8
+AP         7.3e+05       0.4        64386        0.1      917       0.2        3678       0.1
+BA         1.5e+07       7.5      1415342        3.1    34421       6.3      106213       4.3
+CE         8.8e+06       4.4       881571        1.9    14014       2.6       61047       2.5
+DF         2.8e+06       1.4      1099719        2.4    10755       2.0       21801       0.9
+ES         3.8e+06       1.9       797528        1.8    13555       2.5       64749       2.6
+GO         6.4e+06       3.2      1512266        3.3    19507       3.6      100123       4.0
+MA         6.8e+06       3.4       335793        0.7     6868       1.3       33214       1.3
+MG         2.1e+07      10.2      4926454       10.8    67366      12.3      299132      12.0
+MS         2.6e+06       1.3       580821        1.3     8199       1.5       45487       1.8
+MT         3.2e+06       1.6       543484        1.2     9620       1.8       59982       2.4
+PA         8.0e+06       4.0       455649        1.0    14414       2.6       50422       2.0
+PB         3.9e+06       1.9       407624        0.9     6520       1.2       25508       1.0
+PE         9.2e+06       4.6      1088338        2.4    17903       3.3       83632       3.4
+PI         3.2e+06       1.6       255114        0.6     5295       1.0       22737       0.9
+PR         1.1e+07       5.5      3759306        8.3    36912       6.7      246111       9.9
+RJ         1.6e+07       8.1      3839651        8.4    44316       8.1      132959       5.3
+RN         3.4e+06       1.7       430289        0.9     5716       1.0       27473       1.1
+RO         1.7e+06       0.9       212652        0.5     4876       0.9       26735       1.1
+RR         4.9e+05       0.2        53704        0.1      825       0.2        3881       0.2
+RS         1.1e+07       5.6      3622309        8.0    36843       6.7      206979       8.3
+SC         6.6e+06       3.3      2428891        5.3    17606       3.2      139545       5.6
+SE         2.2e+06       1.1       262664        0.6     5785       1.1       19056       0.8
+SP         4.4e+07      21.7     15643414       34.4   145166      26.5      643241      25.8
+TO         1.5e+06       0.7       158702        0.3     4530       0.8       20706       0.8
+TOTAL      2.0e+08     100.0     45444386      100.0   547465     100.0     2488680     100.0

@@ -132,7 +132,29 @@ kable(tabela,caption = "Cidades com mais motocicletas do que automóveis, por est
 7. Relação completa dos estados, destacando a frota de certos tipos de veículos e quanto isso representa em relação ao país.
 
 ```{r}
-
-
-
+popBR <- sum(dados$POPULACAO)
+frotaBR <- sum(dados$TOTAL)
+autoBR <- sum(dados$AUTOMOVEL)
+oniBR <- sum(dados$ONIBUS)
+camBR <- sum(dados$CAMINHAO)
+tabela <- group_by(dados,UF) %>%
+        summarise(Populacao = sum(POPULACAO),
+                  percPop = 100 * sum(POPULACAO)/popBR,
+                  Automoveis = sum(AUTOMOVEL),
+                  percAuto = 100 * sum(AUTOMOVEL)/autoBR,
+                  Onibus = sum(ONIBUS),
+                  percOni = 100 * sum(ONIBUS)/oniBR,
+                  Caminhoes = sum(CAMINHAO),
+                  percCam = 100 * sum(CAMINHAO)/camBR)
+Brasil <- data.table(UF = 'TOTAL',
+                     Populacao = popBR,
+                     percPop = 100,
+                     Automoveis = autoBR,
+                     percAuto = 100,
+                     Onibus = oniBR,
+                     percOni = 100,
+                     Caminhoes = camBR,
+                     percCam = 100)
+tabela<-rbind(tabela,Brasil)
+kable(tabela,digits=1)
 ```

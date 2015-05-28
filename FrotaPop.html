@@ -1106,8 +1106,7 @@ kable(tabela[1:20])</code></pre>
                   MaisMoto = sum(maismoto),
                   percMun = 100 * sum(maismoto)/n())
 
-kable(tabela,caption = &quot;Cidades com mais motocicletas do que automóveis, por estado&quot;,
-      digits=c(2,3,3,5))</code></pre>
+kable(tabela,caption = &quot;Cidades com mais motocicletas do que automóveis, por estado&quot;)</code></pre>
 <table>
 <caption>Cidades com mais motocicletas do que automóveis, por estado</caption>
 <thead>
@@ -1286,6 +1285,356 @@ kable(tabela,caption = &quot;Cidades com mais motocicletas do que automóveis, p
 <ol start="7" style="list-style-type: decimal">
 <li>Relação completa dos estados, destacando a frota de certos tipos de veículos e quanto isso representa em relação ao país.</li>
 </ol>
+<pre class="r"><code>popBR &lt;- sum(dados$POPULACAO)
+frotaBR &lt;- sum(dados$TOTAL)
+autoBR &lt;- sum(dados$AUTOMOVEL)
+oniBR &lt;- sum(dados$ONIBUS)
+camBR &lt;- sum(dados$CAMINHAO)
+tabela &lt;- group_by(dados,UF) %&gt;%
+        summarise(Populacao = sum(POPULACAO),
+                  percPop = 100 * sum(POPULACAO)/popBR,
+                  Automoveis = sum(AUTOMOVEL),
+                  percAuto = 100 * sum(AUTOMOVEL)/autoBR,
+                  Onibus = sum(ONIBUS),
+                  percOni = 100 * sum(ONIBUS)/oniBR,
+                  Caminhoes = sum(CAMINHAO),
+                  percCam = 100 * sum(CAMINHAO)/camBR)
+Brasil &lt;- data.table(UF = 'TOTAL',
+                     Populacao = popBR,
+                     percPop = 100,
+                     Automoveis = autoBR,
+                     percAuto = 100,
+                     Onibus = oniBR,
+                     percOni = 100,
+                     Caminhoes = camBR,
+                     percCam = 100)
+tabela&lt;-rbind(tabela,Brasil)
+kable(tabela,digits=1)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">UF</th>
+<th align="right">Populacao</th>
+<th align="right">percPop</th>
+<th align="right">Automoveis</th>
+<th align="right">percAuto</th>
+<th align="right">Onibus</th>
+<th align="right">percOni</th>
+<th align="right">Caminhoes</th>
+<th align="right">percCam</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">AC</td>
+<td align="right">7.8e+05</td>
+<td align="right">0.4</td>
+<td align="right">67461</td>
+<td align="right">0.1</td>
+<td align="right">921</td>
+<td align="right">0.2</td>
+<td align="right">6297</td>
+<td align="right">0.3</td>
+</tr>
+<tr class="even">
+<td align="left">AL</td>
+<td align="right">3.3e+06</td>
+<td align="right">1.6</td>
+<td align="right">275556</td>
+<td align="right">0.6</td>
+<td align="right">6098</td>
+<td align="right">1.1</td>
+<td align="right">18949</td>
+<td align="right">0.8</td>
+</tr>
+<tr class="odd">
+<td align="left">AM</td>
+<td align="right">3.8e+06</td>
+<td align="right">1.9</td>
+<td align="right">325698</td>
+<td align="right">0.7</td>
+<td align="right">8517</td>
+<td align="right">1.6</td>
+<td align="right">19023</td>
+<td align="right">0.8</td>
+</tr>
+<tr class="even">
+<td align="left">AP</td>
+<td align="right">7.3e+05</td>
+<td align="right">0.4</td>
+<td align="right">64386</td>
+<td align="right">0.1</td>
+<td align="right">917</td>
+<td align="right">0.2</td>
+<td align="right">3678</td>
+<td align="right">0.1</td>
+</tr>
+<tr class="odd">
+<td align="left">BA</td>
+<td align="right">1.5e+07</td>
+<td align="right">7.5</td>
+<td align="right">1415342</td>
+<td align="right">3.1</td>
+<td align="right">34421</td>
+<td align="right">6.3</td>
+<td align="right">106213</td>
+<td align="right">4.3</td>
+</tr>
+<tr class="even">
+<td align="left">CE</td>
+<td align="right">8.8e+06</td>
+<td align="right">4.4</td>
+<td align="right">881571</td>
+<td align="right">1.9</td>
+<td align="right">14014</td>
+<td align="right">2.6</td>
+<td align="right">61047</td>
+<td align="right">2.5</td>
+</tr>
+<tr class="odd">
+<td align="left">DF</td>
+<td align="right">2.8e+06</td>
+<td align="right">1.4</td>
+<td align="right">1099719</td>
+<td align="right">2.4</td>
+<td align="right">10755</td>
+<td align="right">2.0</td>
+<td align="right">21801</td>
+<td align="right">0.9</td>
+</tr>
+<tr class="even">
+<td align="left">ES</td>
+<td align="right">3.8e+06</td>
+<td align="right">1.9</td>
+<td align="right">797528</td>
+<td align="right">1.8</td>
+<td align="right">13555</td>
+<td align="right">2.5</td>
+<td align="right">64749</td>
+<td align="right">2.6</td>
+</tr>
+<tr class="odd">
+<td align="left">GO</td>
+<td align="right">6.4e+06</td>
+<td align="right">3.2</td>
+<td align="right">1512266</td>
+<td align="right">3.3</td>
+<td align="right">19507</td>
+<td align="right">3.6</td>
+<td align="right">100123</td>
+<td align="right">4.0</td>
+</tr>
+<tr class="even">
+<td align="left">MA</td>
+<td align="right">6.8e+06</td>
+<td align="right">3.4</td>
+<td align="right">335793</td>
+<td align="right">0.7</td>
+<td align="right">6868</td>
+<td align="right">1.3</td>
+<td align="right">33214</td>
+<td align="right">1.3</td>
+</tr>
+<tr class="odd">
+<td align="left">MG</td>
+<td align="right">2.1e+07</td>
+<td align="right">10.2</td>
+<td align="right">4926454</td>
+<td align="right">10.8</td>
+<td align="right">67366</td>
+<td align="right">12.3</td>
+<td align="right">299132</td>
+<td align="right">12.0</td>
+</tr>
+<tr class="even">
+<td align="left">MS</td>
+<td align="right">2.6e+06</td>
+<td align="right">1.3</td>
+<td align="right">580821</td>
+<td align="right">1.3</td>
+<td align="right">8199</td>
+<td align="right">1.5</td>
+<td align="right">45487</td>
+<td align="right">1.8</td>
+</tr>
+<tr class="odd">
+<td align="left">MT</td>
+<td align="right">3.2e+06</td>
+<td align="right">1.6</td>
+<td align="right">543484</td>
+<td align="right">1.2</td>
+<td align="right">9620</td>
+<td align="right">1.8</td>
+<td align="right">59982</td>
+<td align="right">2.4</td>
+</tr>
+<tr class="even">
+<td align="left">PA</td>
+<td align="right">8.0e+06</td>
+<td align="right">4.0</td>
+<td align="right">455649</td>
+<td align="right">1.0</td>
+<td align="right">14414</td>
+<td align="right">2.6</td>
+<td align="right">50422</td>
+<td align="right">2.0</td>
+</tr>
+<tr class="odd">
+<td align="left">PB</td>
+<td align="right">3.9e+06</td>
+<td align="right">1.9</td>
+<td align="right">407624</td>
+<td align="right">0.9</td>
+<td align="right">6520</td>
+<td align="right">1.2</td>
+<td align="right">25508</td>
+<td align="right">1.0</td>
+</tr>
+<tr class="even">
+<td align="left">PE</td>
+<td align="right">9.2e+06</td>
+<td align="right">4.6</td>
+<td align="right">1088338</td>
+<td align="right">2.4</td>
+<td align="right">17903</td>
+<td align="right">3.3</td>
+<td align="right">83632</td>
+<td align="right">3.4</td>
+</tr>
+<tr class="odd">
+<td align="left">PI</td>
+<td align="right">3.2e+06</td>
+<td align="right">1.6</td>
+<td align="right">255114</td>
+<td align="right">0.6</td>
+<td align="right">5295</td>
+<td align="right">1.0</td>
+<td align="right">22737</td>
+<td align="right">0.9</td>
+</tr>
+<tr class="even">
+<td align="left">PR</td>
+<td align="right">1.1e+07</td>
+<td align="right">5.5</td>
+<td align="right">3759306</td>
+<td align="right">8.3</td>
+<td align="right">36912</td>
+<td align="right">6.7</td>
+<td align="right">246111</td>
+<td align="right">9.9</td>
+</tr>
+<tr class="odd">
+<td align="left">RJ</td>
+<td align="right">1.6e+07</td>
+<td align="right">8.1</td>
+<td align="right">3839651</td>
+<td align="right">8.4</td>
+<td align="right">44316</td>
+<td align="right">8.1</td>
+<td align="right">132959</td>
+<td align="right">5.3</td>
+</tr>
+<tr class="even">
+<td align="left">RN</td>
+<td align="right">3.4e+06</td>
+<td align="right">1.7</td>
+<td align="right">430289</td>
+<td align="right">0.9</td>
+<td align="right">5716</td>
+<td align="right">1.0</td>
+<td align="right">27473</td>
+<td align="right">1.1</td>
+</tr>
+<tr class="odd">
+<td align="left">RO</td>
+<td align="right">1.7e+06</td>
+<td align="right">0.9</td>
+<td align="right">212652</td>
+<td align="right">0.5</td>
+<td align="right">4876</td>
+<td align="right">0.9</td>
+<td align="right">26735</td>
+<td align="right">1.1</td>
+</tr>
+<tr class="even">
+<td align="left">RR</td>
+<td align="right">4.9e+05</td>
+<td align="right">0.2</td>
+<td align="right">53704</td>
+<td align="right">0.1</td>
+<td align="right">825</td>
+<td align="right">0.2</td>
+<td align="right">3881</td>
+<td align="right">0.2</td>
+</tr>
+<tr class="odd">
+<td align="left">RS</td>
+<td align="right">1.1e+07</td>
+<td align="right">5.6</td>
+<td align="right">3622309</td>
+<td align="right">8.0</td>
+<td align="right">36843</td>
+<td align="right">6.7</td>
+<td align="right">206979</td>
+<td align="right">8.3</td>
+</tr>
+<tr class="even">
+<td align="left">SC</td>
+<td align="right">6.6e+06</td>
+<td align="right">3.3</td>
+<td align="right">2428891</td>
+<td align="right">5.3</td>
+<td align="right">17606</td>
+<td align="right">3.2</td>
+<td align="right">139545</td>
+<td align="right">5.6</td>
+</tr>
+<tr class="odd">
+<td align="left">SE</td>
+<td align="right">2.2e+06</td>
+<td align="right">1.1</td>
+<td align="right">262664</td>
+<td align="right">0.6</td>
+<td align="right">5785</td>
+<td align="right">1.1</td>
+<td align="right">19056</td>
+<td align="right">0.8</td>
+</tr>
+<tr class="even">
+<td align="left">SP</td>
+<td align="right">4.4e+07</td>
+<td align="right">21.7</td>
+<td align="right">15643414</td>
+<td align="right">34.4</td>
+<td align="right">145166</td>
+<td align="right">26.5</td>
+<td align="right">643241</td>
+<td align="right">25.8</td>
+</tr>
+<tr class="odd">
+<td align="left">TO</td>
+<td align="right">1.5e+06</td>
+<td align="right">0.7</td>
+<td align="right">158702</td>
+<td align="right">0.3</td>
+<td align="right">4530</td>
+<td align="right">0.8</td>
+<td align="right">20706</td>
+<td align="right">0.8</td>
+</tr>
+<tr class="even">
+<td align="left">TOTAL</td>
+<td align="right">2.0e+08</td>
+<td align="right">100.0</td>
+<td align="right">45444386</td>
+<td align="right">100.0</td>
+<td align="right">547465</td>
+<td align="right">100.0</td>
+<td align="right">2488680</td>
+<td align="right">100.0</td>
+</tr>
+</tbody>
+</table>
 </div>
 
 
