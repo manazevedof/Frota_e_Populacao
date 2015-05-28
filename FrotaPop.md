@@ -33,7 +33,7 @@ dados <- select(dados[estados],-c(ESTADO,CAPITAL))
 
 ###Características Gerais
 
-1. Número de municípios, população e frota total, de automóveis e motocicletas por estado
+1. Para os estados: número de municípios, população, frota total, taxa de veículos por 1000 habitantes (VPM), frota de automóveis e taxa de automóveis por 1000 habitantes (APM). Lista em ordem decrescente de APM.
 
 
 ```r
@@ -41,107 +41,93 @@ tabela <- group_by(dados,UF) %>%
         summarise(Nmun = n(),
                   Populacao = sum(POPULACAO),
                   Veiculos = sum(TOTAL),
+                  VPM = 1000 * sum(TOTAL)/sum(POPULACAO),                
                   Automoveis = sum(AUTOMOVEL),
-                  Motocicletas = sum(MOTOCICLETA))
-
+                  APM = 1000 * sum(AUTOMOVEL)/sum(POPULACAO)) %>%
+        arrange(desc(APM))
 kable(tabela)
 ```
 
 
 
-UF    Nmun   Populacao   Veiculos   Automoveis   Motocicletas
----  -----  ----------  ---------  -----------  -------------
-AC      22      776463     205777        67461          86048
-AL     102     3300935     614566       275556         199317
-AM      62     3807921     700849       325698         183987
-AP      16      734996     152634        64386          50326
-BA     417    15044137    3158326      1415342        1002208
-CE     184     8778576    2384395       881571        1045078
-DF       1     2789761    1511110      1099719         154277
-ES      78     3839366    1585076       797528         373365
-GO     246     6434048    3169088      1512266         743879
-MA     217     6794301    1215478       335793         601923
-MG     853    20593356    8884663      4926454        2106326
-MS      79     2587269    1253199       580821         313390
-MT     141     3182113    1565739       543484         495288
-PA     144     7999729    1428355       455649         593828
-PB     223     3914421     959085       407624         366699
-PE     185     9208550    2396738      1088338         828291
-PI     224     3184166     855445       255114         410745
-PR     399    10997465    6351183      3759306        1011274
-RJ      92    16369179    5568514      3839651         748356
-RN     167     3373959     967299       430289         340918
-RO      52     1728214     758308       212652         319337
-RR      15      488072     165339        53704          64676
-RS     497    11164043    5885383      3622309         959339
-SC     295     6634254    4201255      2428891         763019
-SE      75     2195662     575510       262664         190159
-SP     645    43663669   24560201     15643414        3978276
-TO     139     1478164     527213       158702         184135
+UF    Nmun   Populacao   Veiculos   VPM   Automoveis   APM
+---  -----  ----------  ---------  ----  -----------  ----
+DF       1     2789761    1511110   542      1099719   394
+SC     295     6634254    4201255   633      2428891   366
+SP     645    43663669   24560201   562     15643414   358
+PR     399    10997465    6351183   578      3759306   342
+RS     497    11164043    5885383   527      3622309   324
+MG     853    20593356    8884663   431      4926454   239
+GO     246     6434048    3169088   493      1512266   235
+RJ      92    16369179    5568514   340      3839651   235
+MS      79     2587269    1253199   484       580821   224
+ES      78     3839366    1585076   413       797528   208
+MT     141     3182113    1565739   492       543484   171
+RN     167     3373959     967299   287       430289   128
+RO      52     1728214     758308   439       212652   123
+SE      75     2195662     575510   262       262664   120
+PE     185     9208550    2396738   260      1088338   118
+RR      15      488072     165339   339        53704   110
+TO     139     1478164     527213   357       158702   107
+PB     223     3914421     959085   245       407624   104
+CE     184     8778576    2384395   272       881571   100
+BA     417    15044137    3158326   210      1415342    94
+AP      16      734996     152634   208        64386    88
+AC      22      776463     205777   265        67461    87
+AM      62     3807921     700849   184       325698    86
+AL     102     3300935     614566   186       275556    83
+PI     224     3184166     855445   269       255114    80
+PA     144     7999729    1428355   179       455649    57
+MA     217     6794301    1215478   179       335793    49
 
-2. População e frota total, de automóveis e motocicletas das capitais
+2. Para as capitais: população, frota total, taxa de veículos por 1000 habitantes (VPM), frota de automóveis, taxa de automóveis por 1000 habitantes (APM), frota de motocicletas e taxa de motocicletas por 1000 habitantes (MPM). Lista em ordem decrescente de APM.
 
 
 ```r
 tabela <- filter(dados, str_c(UF,MUNICIPIO,sep='-') %in% 
                          str_c(estados$SIGLA,estados$CAPITAL,sep='-')) %>%
+        mutate(VPM = 1000 * TOTAL/POPULACAO) %>%
         mutate(APM = 1000 * AUTOMOVEL/POPULACAO) %>%
         mutate(MPM = 1000 * MOTOCICLETA/POPULACAO) %>%
-        select(UF,MUNICIPIO,POPULACAO,TOTAL,AUTOMOVEL,APM,MOTOCICLETA,MPM) %>%
+        select(UF,MUNICIPIO,POPULACAO,TOTAL,VPM,AUTOMOVEL,APM,MOTOCICLETA,MPM) %>%
         arrange(desc(APM))
 
 APMcap <- 1000 * sum(tabela$AUTOMOVEL)/sum(tabela$POPULACAO)
-APMcap
-```
-
-```
-## [1] 317
-```
-
-```r
 APMbr <- 1000 * sum(dados$AUTOMOVEL)/sum(dados$POPULACAO)
-APMbr
-```
-
-```
-## [1] 226
-```
-
-```r
 kable(tabela)
 ```
 
 
 
-UF   MUNICIPIO         POPULACAO     TOTAL   AUTOMOVEL   APM   MOTOCICLETA   MPM
----  ---------------  ----------  --------  ----------  ----  ------------  ----
-PR   CURITIBA            1848946   1429534     1000903   541        128882    70
-SC   FLORIANOPOLIS        453285    305028      206845   456         41553    92
-MG   BELO HORIZONTE      2479165   1596081     1101919   444        197150    80
-SP   SAO PAULO          11821873   7010508     4971813   421        799411    68
-GO   GOIANIA             1393575   1045796      564554   405        206724   148
-DF   BRASILIA            2789761   1511110     1099719   394        154277    55
-RS   PORTO ALEGRE        1467816    802932      571299   389         83947    57
-ES   VITORIA              348268    185427      122229   351         19861    57
-MT   CUIABA               569830    344189      178035   312         74171   130
-MS   CAMPO GRANDE         832352    483039      248372   298        114443   137
-RJ   RIO DE JANEIRO      6429923   2451155     1824803   284        238855    37
-SE   ARACAJU              614577    257261      154271   251         50421    82
-RN   NATAL                853928    339429      200312   235         76403    89
-TO   PALMAS               257904    144562       60132   233         38772   150
-PE   RECIFE              1599513    609765      371833   232        119498    75
-PB   JOAO PESSOA          769607    298796      172667   224         77126   100
-CE   FORTALEZA           2551806    908074      511109   200        229154    90
-PI   TERESINA             836475    380576      166131   199        133767   160
-RO   PORTO VELHO          484992    222218       92648   191         71455   147
-BA   SALVADOR            2883682    785257      533990   185        105207    36
-MA   SAO LUIS            1053922    327808      177176   168         78601    75
-AL   MACEIO               996733    266465      161275   162         51637    52
-RR   BOA VISTA            308996    145678       49527   160         54343   176
-AM   MANAUS              1982177    581179      311179   157        121656    61
-AC   RIO BRANCO           357194    139683       53215   149         53553   150
-PA   BELEM               1425922    373846      204801   144         88211    62
-AP   MACAPA               437256    121519       52922   121         38673    88
+UF   MUNICIPIO         POPULACAO     TOTAL   VPM   AUTOMOVEL   APM   MOTOCICLETA   MPM
+---  ---------------  ----------  --------  ----  ----------  ----  ------------  ----
+PR   CURITIBA            1848946   1429534   773     1000903   541        128882    70
+SC   FLORIANOPOLIS        453285    305028   673      206845   456         41553    92
+MG   BELO HORIZONTE      2479165   1596081   644     1101919   444        197150    80
+SP   SAO PAULO          11821873   7010508   593     4971813   421        799411    68
+GO   GOIANIA             1393575   1045796   750      564554   405        206724   148
+DF   BRASILIA            2789761   1511110   542     1099719   394        154277    55
+RS   PORTO ALEGRE        1467816    802932   547      571299   389         83947    57
+ES   VITORIA              348268    185427   532      122229   351         19861    57
+MT   CUIABA               569830    344189   604      178035   312         74171   130
+MS   CAMPO GRANDE         832352    483039   580      248372   298        114443   137
+RJ   RIO DE JANEIRO      6429923   2451155   381     1824803   284        238855    37
+SE   ARACAJU              614577    257261   419      154271   251         50421    82
+RN   NATAL                853928    339429   397      200312   235         76403    89
+TO   PALMAS               257904    144562   561       60132   233         38772   150
+PE   RECIFE              1599513    609765   381      371833   232        119498    75
+PB   JOAO PESSOA          769607    298796   388      172667   224         77126   100
+CE   FORTALEZA           2551806    908074   356      511109   200        229154    90
+PI   TERESINA             836475    380576   455      166131   199        133767   160
+RO   PORTO VELHO          484992    222218   458       92648   191         71455   147
+BA   SALVADOR            2883682    785257   272      533990   185        105207    36
+MA   SAO LUIS            1053922    327808   311      177176   168         78601    75
+AL   MACEIO               996733    266465   267      161275   162         51637    52
+RR   BOA VISTA            308996    145678   471       49527   160         54343   176
+AM   MANAUS              1982177    581179   293      311179   157        121656    61
+AC   RIO BRANCO           357194    139683   391       53215   149         53553   150
+PA   BELEM               1425922    373846   262      204801   144         88211    62
+AP   MACAPA               437256    121519   278       52922   121         38673    88
 
 ```r
 ordem <- reorder(tabela$MUNICIPIO,tabela$APM)
@@ -169,8 +155,6 @@ tabela <- group_by(dados,REGIAO) %>%
         mutate(MPM = 1000 * Motocicletas/Populacao) %>%
         select(REGIAO,Populacao,Veiculos,Automoveis,APM,Motocicletas,MPM) %>%
         arrange(desc(APM))
-
-APMbr <- 1000 * sum(tabela$Automoveis)/sum(tabela$Populacao)
 kable(tabela)
 ```
 
@@ -194,4 +178,125 @@ ggplot(data=tabela, aes(x=ordem, y=APM)) +
 ```
 
 ![](FrotaPop_files/figure-html/unnamed-chunk-5-1.png) 
+
+4. Lista das 20 cidades com maiores percentuais de motocicletas na frota. Ordem decrescente do percentual de motocicletas.
+
+
+```r
+tabela <- mutate(dados,percM = 100 * MOTOCICLETA/TOTAL) %>%
+        arrange(desc(percM)) %>%
+        select(MUNICIPIO,UF,TOTAL,MOTOCICLETA,percM)
+kable(tabela[1:20])
+```
+
+
+
+MUNICIPIO                      UF    TOTAL   MOTOCICLETA   percM
+-----------------------------  ---  ------  ------------  ------
+MARAJA DO SENA                 MA      367           341      93
+SAO ROBERTO                    MA      623           537      86
+LAGOA DO MATO                  MA     1162           991      85
+BACURITUBA                     MA      419           356      85
+LAGOA GRANDE DO MARANHAO       MA      818           695      85
+CURUA                          PA      365           309      85
+SAO JOAO DO CARU               MA      746           630      84
+PEREIRO                        CE     7342          6180      84
+DUQUE BACELAR                  MA      633           531      84
+LIMOEIRO DO AJURU              PA      155           130      84
+SANTA CRUZ DO ARARI            PA       93            78      84
+MADEIRO                        PI      630           524      83
+PEDRO DO ROSARIO               MA     1123           930      83
+JOCA MARQUES                   PI      495           407      82
+SUCUPIRA DO RIACHAO            MA      580           475      82
+POCAO DE PEDRAS                MA     3624          2960      82
+SANTANA DE MANGUEIRA           PB      747           609      82
+PARNAGUA                       PI      784           638      81
+PASSAGEM FRANCA                MA     2132          1726      81
+SAO RAIMUNDO DO DOCA BEZERRA   MA      483           391      81
+
+5. Lista das 20 cidades com maiores taxas de automóveis por 1000 habitantes. Ordem decrescente de APM.
+
+
+```r
+tabela <- mutate(dados,APM = 1000 * AUTOMOVEL/POPULACAO) %>%
+        select(MUNICIPIO,UF,POPULACAO,AUTOMOVEL,APM) %>%
+        arrange(desc(APM))
+kable(tabela[1:20])
+```
+
+
+
+MUNICIPIO                      UF    POPULACAO   AUTOMOVEL   APM
+-----------------------------  ---  ----------  ----------  ----
+SAO CAETANO DO SUL             SP       156362       98738   631
+SANTA BARBARA DO MONTE VERDE   MG         2972        1811   609
+RIO PRETO                      MG         5487        3249   592
+CURITIBA                       PR      1848946     1000903   541
+VINHEDO                        SP        69845       37051   530
+BOM JESUS DO NORTE             ES        10095        5290   524
+CAMPINAS                       SP      1144862      565408   494
+SANTO ANDRE                    SP       704942      347984   494
+AGUAS DE SAO PEDRO             SP         3004        1471   490
+RIO BONITO                     RJ        56942       27447   482
+VALINHOS                       SP       116308       55808   480
+JUNDIAI                        SP       393920      187851   477
+BLUMENAU                       SC       329082      152955   465
+SAO BERNARDO DO CAMPO          SP       805895      367772   456
+FLORIANOPOLIS                  SC       453285      206845   456
+JARDIM OLINDA                  PR         1424         646   454
+GRAMADO                        RS        34110       15440   453
+CASCA                          RS         8993        4037   449
+NOVA PETROPOLIS                RS        20126        8981   446
+BELO HORIZONTE                 MG      2479165     1101919   444
+
+6. Relação completa dos estados, destacando o número de cidades nas quais a frota de motocicletas é maior do que a de automóveis.
+
+
+```r
+tabela <- mutate(dados,maismoto = (MOTOCICLETA>AUTOMOVEL)) %>%
+        group_by(UF) %>%
+        summarise(Nmun=n(),
+                  MaisMoto = sum(maismoto),
+                  percMun = 100 * sum(maismoto)/n())
+
+kable(tabela,caption = "Cidades com mais motocicletas do que automóveis, por estado",
+      digits=c(2,3,3,5))
+```
+
+
+
+Table: Cidades com mais motocicletas do que automóveis, por estado
+
+UF    Nmun   MaisMoto   percMun
+---  -----  ---------  --------
+AC      22         22    100.00
+AL     102         74     72.55
+AM      62         58     93.55
+AP      16          9     56.25
+BA     417        303     72.66
+CE     184        174     94.57
+DF       1          0      0.00
+ES      78         29     37.18
+GO     246         44     17.89
+MA     217        214     98.62
+MG     853        278     32.59
+MS      79          8     10.13
+MT     141        111     78.72
+PA     144        139     96.53
+PB     223        190     85.20
+PE     185        145     78.38
+PI     224        223     99.55
+PR     399          0      0.00
+RJ      92          4      4.35
+RN     167        151     90.42
+RO      52         49     94.23
+RR      15         14     93.33
+RS     497          2      0.40
+SC     295          0      0.00
+SE      75         55     73.33
+SP     645          1      0.16
+TO     139        131     94.24
+
+7. Relação completa dos estados, destacando a frota de certos tipos de veículos e quanto isso representa em relação ao país.
+
 

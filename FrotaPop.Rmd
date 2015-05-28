@@ -37,34 +37,33 @@ dados <- select(dados[estados],-c(ESTADO,CAPITAL))
 
 ###Características Gerais
 
-1. Número de municípios, população e frota total, de automóveis e motocicletas por estado
+1. Para os estados: número de municípios, população, frota total, taxa de veículos por 1000 habitantes (VPM), frota de automóveis e taxa de automóveis por 1000 habitantes (APM). Lista em ordem decrescente de APM.
 
 ```{r}
 tabela <- group_by(dados,UF) %>%
         summarise(Nmun = n(),
                   Populacao = sum(POPULACAO),
                   Veiculos = sum(TOTAL),
+                  VPM = 1000 * sum(TOTAL)/sum(POPULACAO),                
                   Automoveis = sum(AUTOMOVEL),
-                  Motocicletas = sum(MOTOCICLETA))
-
+                  APM = 1000 * sum(AUTOMOVEL)/sum(POPULACAO)) %>%
+        arrange(desc(APM))
 kable(tabela)
 ```
 
-2. População e frota total, de automóveis e motocicletas das capitais
+2. Para as capitais: população, frota total, taxa de veículos por 1000 habitantes (VPM), frota de automóveis, taxa de automóveis por 1000 habitantes (APM), frota de motocicletas e taxa de motocicletas por 1000 habitantes (MPM). Lista em ordem decrescente de APM.
 
 ```{r}
 tabela <- filter(dados, str_c(UF,MUNICIPIO,sep='-') %in% 
                          str_c(estados$SIGLA,estados$CAPITAL,sep='-')) %>%
+        mutate(VPM = 1000 * TOTAL/POPULACAO) %>%
         mutate(APM = 1000 * AUTOMOVEL/POPULACAO) %>%
         mutate(MPM = 1000 * MOTOCICLETA/POPULACAO) %>%
-        select(UF,MUNICIPIO,POPULACAO,TOTAL,AUTOMOVEL,APM,MOTOCICLETA,MPM) %>%
+        select(UF,MUNICIPIO,POPULACAO,TOTAL,VPM,AUTOMOVEL,APM,MOTOCICLETA,MPM) %>%
         arrange(desc(APM))
 
 APMcap <- 1000 * sum(tabela$AUTOMOVEL)/sum(tabela$POPULACAO)
-APMcap
 APMbr <- 1000 * sum(dados$AUTOMOVEL)/sum(dados$POPULACAO)
-APMbr
-
 kable(tabela)
 ordem <- reorder(tabela$MUNICIPIO,tabela$APM)
 ggplot(data=tabela, aes(x=ordem, y=APM)) +
@@ -74,8 +73,7 @@ ggplot(data=tabela, aes(x=ordem, y=APM)) +
         geom_hline(aes(yintercept=APMbr),color="green") +
         xlab("Capitais") +
         ylab("Automóveis por 1000 Habitantes")
-        
-        
+
 ```
 
 3. População e frota total, de automóveis e motocicletas das regiões
@@ -90,8 +88,6 @@ tabela <- group_by(dados,REGIAO) %>%
         mutate(MPM = 1000 * Motocicletas/Populacao) %>%
         select(REGIAO,Populacao,Veiculos,Automoveis,APM,Motocicletas,MPM) %>%
         arrange(desc(APM))
-
-APMbr <- 1000 * sum(tabela$Automoveis)/sum(tabela$Populacao)
 kable(tabela)
 ordem <- reorder(tabela$REGIAO,tabela$APM)
 ggplot(data=tabela, aes(x=ordem, y=APM)) +
@@ -101,3 +97,42 @@ ggplot(data=tabela, aes(x=ordem, y=APM)) +
         ylab("Automóveis por 1000 Habitantes")
 ```
 
+4. Lista das 20 cidades com maiores percentuais de motocicletas na frota. Ordem decrescente do percentual de motocicletas.
+
+```{r}
+tabela <- mutate(dados,percM = 100 * MOTOCICLETA/TOTAL) %>%
+        arrange(desc(percM)) %>%
+        select(MUNICIPIO,UF,TOTAL,MOTOCICLETA,percM)
+kable(tabela[1:20])
+
+```
+
+5. Lista das 20 cidades com maiores taxas de automóveis por 1000 habitantes. Ordem decrescente de APM.
+
+```{r}
+tabela <- mutate(dados,APM = 1000 * AUTOMOVEL/POPULACAO) %>%
+        select(MUNICIPIO,UF,POPULACAO,AUTOMOVEL,APM) %>%
+        arrange(desc(APM))
+kable(tabela[1:20])
+```
+
+6. Relação completa dos estados, destacando o número de cidades nas quais a frota de motocicletas é maior do que a de automóveis.
+
+```{r}
+tabela <- mutate(dados,maismoto = (MOTOCICLETA>AUTOMOVEL)) %>%
+        group_by(UF) %>%
+        summarise(Nmun=n(),
+                  MaisMoto = sum(maismoto),
+                  percMun = 100 * sum(maismoto)/n())
+
+kable(tabela,caption = "Cidades com mais motocicletas do que automóveis, por estado")
+
+```
+
+7. Relação completa dos estados, destacando a frota de certos tipos de veículos e quanto isso representa em relação ao país.
+
+```{r}
+
+
+
+```
