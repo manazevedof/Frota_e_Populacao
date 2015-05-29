@@ -1,17 +1,11 @@
----
-title: "PopulaÁ„o e Frota de VeÌculos"
-author: "Mario Azevedo"
-date: "Domingo, 24/05/2015"
-output:
-  html_document:
-    keep_md: yes
-  pdf_document: default
-  word_document: default
----
+# Popula√ß√£o e Frota de Ve√≠culos
+Mario Azevedo  
+Domingo, 24/05/2015  
 
-###Carregando as bibliotecas necess·rias
+###Carregando as bibliotecas necess√°rias
 
-```{r, message=FALSE, warning=FALSE}
+
+```r
 library(data.table)
 library(dplyr)
 library(stringr)
@@ -27,8 +21,8 @@ options(scipen=1, digits=2, width=105)
 
 
 
-```{r}
 
+```r
 fileURL <- "http://www.denatran.gov.br/download/frota/Frota_por_Municipio_e_Tipo-ABR_15.rar"
 localfilename <- "Frota_por_Municipio_e_Tipo-ABR_15.rar"
 download.file(fileURL,localfilename,mode='wb')

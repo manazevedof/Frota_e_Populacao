@@ -1,0 +1,10 @@
+base
+data.table
+dplyr
+stringr
+knitr
+pander
+ggplot2
+scales
+bitops
+RCurl
