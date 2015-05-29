@@ -30,9 +30,12 @@ options(scipen=1, digits=2, width=105)
 #download.file(fileURL,localfilename,mode='wb')
 
 dados <- fread('Frota_por_Municipio_e_Tipo-ABR_15.csv',sep=';')
-
+cidades <- fread('estimativas_dou_2014_xls.csv',sep=';')
 sum(dados$TOTAL)
 nrow(dados)
+cidades <- mutate(cidades,NOME_MUN = str_to_upper(iconv(NOME_MUN,to = "ASCII//TRANSLIT")))
+arrange(cidades[!(cidades$NOME_MUN %in% dados$MUNICIPIO)],UF)
+arrange(dados[!(dados$MUNICIPIO %in% cidades$NOME_MUN)],UF)
 ```
 
 ###Frota dos estados
