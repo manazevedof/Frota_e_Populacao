@@ -99,36 +99,41 @@ ggplot(data=tabela, aes(x=ordem, y=APM)) +
         ylab("Automóveis por 1000 Habitantes")
 ```
 
-####4. Lista das 20 cidades com maiores percentuais de motocicletas na frota. Ordem decrescente do percentual de motocicletas.
+####4. As 10 cidades brasileiras com maiores percentuais de motocicletas na frota. 
 
 ```{r}
 tabela <- mutate(dados,percM = 100 * MOTOCICLETA/TOTAL) %>%
         arrange(desc(percM)) %>%
         select(MUNICIPIO,UF,TOTAL,MOTOCICLETA,percM)
-kable(tabela[1:20])
+kable(tabela[1:10])
 
 ```
 
-####5. Lista das 20 cidades com maiores taxas de automóveis por 1000 habitantes. Ordem decrescente de APM.
+####5. As 10 cidades brasileiras com maiores taxas de automóveis por 1000 habitantes. 
 
 ```{r}
 tabela <- mutate(dados,APM = 1000 * AUTOMOVEL/POPULACAO) %>%
         select(MUNICIPIO,UF,POPULACAO,AUTOMOVEL,APM) %>%
         arrange(desc(APM))
-kable(tabela[1:20])
+kable(tabela[1:10])
 ```
 
 ####6. Relação completa dos estados, destacando o número de cidades nas quais a frota de motocicletas é maior do que a de automóveis.
 
-```{r}
+```{r, results='asis'}
 tabela <- mutate(dados,maismoto = (MOTOCICLETA>AUTOMOVEL)) %>%
         group_by(UF) %>%
         summarise(Nmun=n(),
                   MaisMoto = sum(maismoto),
                   percMun = 100 * sum(maismoto)/n())
 
-kable(tabela,caption = "Cidades com mais motocicletas do que automóveis, por estado")
-
+#kable(tabela,caption = "Cidades com mais motocicletas do que automóveis, por estado")
+panderOptions('table.split.table', Inf)
+pandoc.table(tabela, style = "simple",
+             caption = "**Cidades com mais motocicletas do que automóveis, por estado**",
+             justify = c('left',rep('right',3)),
+             digits=5,round=1,big.mark=".",decimal.mark=',',
+             emphasize.strong.cols=1)
 ```
 
 ####7. Relação completa dos estados, destacando a frota de certos tipos de veículos e quanto isso representa em relação ao país.
@@ -159,7 +164,7 @@ Brasil <- data.table(UF = 'TOTAL',
                      pCam = 100.0)
 tabela<-rbind(tabela,Brasil)
 linha=nrow(tabela)
-panderOptions('knitr.auto.asis', FALSE)
+#panderOptions('knitr.auto.asis', FALSE)
 panderOptions('table.split.table', Inf)
 pandoc.table(tabela, style = "simple",
              justify = c('center',rep('right',8)),
@@ -167,4 +172,59 @@ pandoc.table(tabela, style = "simple",
              emphasize.strong.rows=linha,
              emphasize.strong.cols=1)
 
+```
+
+####8. As 10 cidades cearenses com *maior* percentual de motocicletas
+
+```{r, results='asis'}
+tabela <- filter(dados,UF=='CE') %>% 
+        mutate(percM = 100 * MOTOCICLETA/TOTAL) %>%
+        arrange(desc(percM)) %>%
+        select(MUNICIPIO,TOTAL,MOTOCICLETA,percM)
+panderOptions('table.split.table', Inf)
+pandoc.table(head(tabela,10), style = "simple",
+             caption = "**Cidades cearenses com maior percentual de motocicletas na frota**",
+             justify = c('left',rep('right',3)),
+             digits=5,round=1,big.mark=".",decimal.mark=',',
+             emphasize.strong.cols=1)
+```
+
+####9. As 10 cidades cearenses com *menor* percentual de motocicletas
+
+```{r, results='asis'}
+tabela <- arrange(tabela,percM)
+panderOptions('table.split.table', Inf)
+pandoc.table(head(tabela,10), style = "simple",
+             caption = "**Cidades cearenses com menor percentual de motocicletas na frota**",
+             justify = c('left',rep('right',3)),
+             digits=5,round=1,big.mark=".",decimal.mark=',',
+             emphasize.strong.cols=1)
+```
+
+####10. As 10 cidades cearenses com maior numero de automoveis por 1000 habitantes
+
+```{r, results='asis'}
+tabela <- filter(dados,UF=='CE') %>% 
+        mutate(APM = 1000 * AUTOMOVEL/POPULACAO) %>%
+        select(MUNICIPIO,POPULACAO,AUTOMOVEL,APM) %>%
+        arrange(desc(APM))
+pandoc.table(head(tabela,10), style = "simple",
+             caption = "**Cidades cearenses com maior numero de automoveis por 1000 habitantes**",
+             justify = c('left',rep('right',3)),
+             digits=5,round=1,big.mark=".",decimal.mark=',',
+             emphasize.strong.cols=1)
+```
+
+####11. As 10 cidades cearenses com maior numero de veículos por 1000 habitantes
+
+```{r, results='asis'}
+tabela <- filter(dados,UF=='CE') %>% 
+        mutate(VPM = 1000 * TOTAL/POPULACAO) %>%
+        select(MUNICIPIO,POPULACAO,TOTAL,VPM) %>%
+        arrange(desc(VPM))
+pandoc.table(head(tabela,10), style = "simple",
+             caption = "**Cidades cearenses com maior numero de veículos por 1000 habitantes**",
+             justify = c('left',rep('right',3)),
+             digits=5,round=1,big.mark=".",decimal.mark=',',
+             emphasize.strong.cols=1)
 ```

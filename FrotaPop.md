@@ -180,49 +180,39 @@ ggplot(data=tabela, aes(x=ordem, y=APM)) +
 
 ![](FrotaPop_files/figure-html/unnamed-chunk-5-1.png) 
 
-####4. Lista das 20 cidades com maiores percentuais de motocicletas na frota. Ordem decrescente do percentual de motocicletas.
+####4. As 10 cidades brasileiras com maiores percentuais de motocicletas na frota. 
 
 
 ```r
 tabela <- mutate(dados,percM = 100 * MOTOCICLETA/TOTAL) %>%
         arrange(desc(percM)) %>%
         select(MUNICIPIO,UF,TOTAL,MOTOCICLETA,percM)
-kable(tabela[1:20])
+kable(tabela[1:10])
 ```
 
 
 
-MUNICIPIO                      UF    TOTAL   MOTOCICLETA   percM
------------------------------  ---  ------  ------------  ------
-MARAJA DO SENA                 MA      367           341      93
-SAO ROBERTO                    MA      623           537      86
-LAGOA DO MATO                  MA     1162           991      85
-BACURITUBA                     MA      419           356      85
-LAGOA GRANDE DO MARANHAO       MA      818           695      85
-CURUA                          PA      365           309      85
-SAO JOAO DO CARU               MA      746           630      84
-PEREIRO                        CE     7342          6180      84
-DUQUE BACELAR                  MA      633           531      84
-LIMOEIRO DO AJURU              PA      155           130      84
-SANTA CRUZ DO ARARI            PA       93            78      84
-MADEIRO                        PI      630           524      83
-PEDRO DO ROSARIO               MA     1123           930      83
-JOCA MARQUES                   PI      495           407      82
-SUCUPIRA DO RIACHAO            MA      580           475      82
-POCAO DE PEDRAS                MA     3624          2960      82
-SANTANA DE MANGUEIRA           PB      747           609      82
-PARNAGUA                       PI      784           638      81
-PASSAGEM FRANCA                MA     2132          1726      81
-SAO RAIMUNDO DO DOCA BEZERRA   MA      483           391      81
+MUNICIPIO                  UF    TOTAL   MOTOCICLETA   percM
+-------------------------  ---  ------  ------------  ------
+MARAJA DO SENA             MA      367           341      93
+SAO ROBERTO                MA      623           537      86
+LAGOA DO MATO              MA     1162           991      85
+BACURITUBA                 MA      419           356      85
+LAGOA GRANDE DO MARANHAO   MA      818           695      85
+CURUA                      PA      365           309      85
+SAO JOAO DO CARU           MA      746           630      84
+PEREIRO                    CE     7342          6180      84
+DUQUE BACELAR              MA      633           531      84
+LIMOEIRO DO AJURU          PA      155           130      84
 
-####5. Lista das 20 cidades com maiores taxas de automóveis por 1000 habitantes. Ordem decrescente de APM.
+####5. As 10 cidades brasileiras com maiores taxas de automóveis por 1000 habitantes. 
 
 
 ```r
 tabela <- mutate(dados,APM = 1000 * AUTOMOVEL/POPULACAO) %>%
         select(MUNICIPIO,UF,POPULACAO,AUTOMOVEL,APM) %>%
         arrange(desc(APM))
-kable(tabela[1:20])
+kable(tabela[1:10])
 ```
 
 
@@ -239,16 +229,6 @@ CAMPINAS                       SP      1144862      565408   494
 SANTO ANDRE                    SP       704942      347984   494
 AGUAS DE SAO PEDRO             SP         3004        1471   490
 RIO BONITO                     RJ        56942       27447   482
-VALINHOS                       SP       116308       55808   480
-JUNDIAI                        SP       393920      187851   477
-BLUMENAU                       SC       329082      152955   465
-SAO BERNARDO DO CAMPO          SP       805895      367772   456
-FLORIANOPOLIS                  SC       453285      206845   456
-JARDIM OLINDA                  PR         1424         646   454
-GRAMADO                        RS        34110       15440   453
-CASCA                          RS         8993        4037   449
-NOVA PETROPOLIS                RS        20126        8981   446
-BELO HORIZONTE                 MG      2479165     1101919   444
 
 ####6. Relação completa dos estados, destacando o número de cidades nas quais a frota de motocicletas é maior do que a de automóveis.
 
@@ -260,42 +240,48 @@ tabela <- mutate(dados,maismoto = (MOTOCICLETA>AUTOMOVEL)) %>%
                   MaisMoto = sum(maismoto),
                   percMun = 100 * sum(maismoto)/n())
 
-kable(tabela,caption = "Cidades com mais motocicletas do que automóveis, por estado")
+#kable(tabela,caption = "Cidades com mais motocicletas do que automóveis, por estado")
+panderOptions('table.split.table', Inf)
+pandoc.table(tabela, style = "simple",
+             caption = "**Cidades com mais motocicletas do que automóveis, por estado**",
+             justify = c('left',rep('right',3)),
+             digits=5,round=1,big.mark=".",decimal.mark=',',
+             emphasize.strong.cols=1)
 ```
 
 
 
-Table: Cidades com mais motocicletas do que automóveis, por estado
+UF       Nmun   MaisMoto   percMun
+------ ------ ---------- ---------
+**AC**     22         22       100
+**AL**    102         74      72,5
+**AM**     62         58      93,5
+**AP**     16          9      56,2
+**BA**    417        303      72,7
+**CE**    184        174      94,6
+**DF**      1          0         0
+**ES**     78         29      37,2
+**GO**    246         44      17,9
+**MA**    217        214      98,6
+**MG**    853        278      32,6
+**MS**     79          8      10,1
+**MT**    141        111      78,7
+**PA**    144        139      96,5
+**PB**    223        190      85,2
+**PE**    185        145      78,4
+**PI**    224        223      99,6
+**PR**    399          0         0
+**RJ**     92          4       4,3
+**RN**    167        151      90,4
+**RO**     52         49      94,2
+**RR**     15         14      93,3
+**RS**    497          2       0,4
+**SC**    295          0         0
+**SE**     75         55      73,3
+**SP**    645          1       0,2
+**TO**    139        131      94,2
 
-UF    Nmun   MaisMoto   percMun
----  -----  ---------  --------
-AC      22         22    100.00
-AL     102         74     72.55
-AM      62         58     93.55
-AP      16          9     56.25
-BA     417        303     72.66
-CE     184        174     94.57
-DF       1          0      0.00
-ES      78         29     37.18
-GO     246         44     17.89
-MA     217        214     98.62
-MG     853        278     32.59
-MS      79          8     10.13
-MT     141        111     78.72
-PA     144        139     96.53
-PB     223        190     85.20
-PE     185        145     78.38
-PI     224        223     99.55
-PR     399          0      0.00
-RJ      92          4      4.35
-RN     167        151     90.42
-RO      52         49     94.23
-RR      15         14     93.33
-RS     497          2      0.40
-SC     295          0      0.00
-SE      75         55     73.33
-SP     645          1      0.16
-TO     139        131     94.24
+Table: **Cidades com mais motocicletas do que automóveis, por estado**
 
 ####7. Relação completa dos estados, destacando a frota de certos tipos de veículos e quanto isso representa em relação ao país.
 
@@ -326,7 +312,7 @@ Brasil <- data.table(UF = 'TOTAL',
                      pCam = 100.0)
 tabela<-rbind(tabela,Brasil)
 linha=nrow(tabela)
-panderOptions('knitr.auto.asis', FALSE)
+#panderOptions('knitr.auto.asis', FALSE)
 panderOptions('table.split.table', Inf)
 pandoc.table(tabela, style = "simple",
              justify = c('center',rep('right',8)),
@@ -367,3 +353,130 @@ pandoc.table(tabela, style = "simple",
  **SP**        43.663.669    21,7     15.643.414    34,4     145.166    26,5       643.241    25,8
  **TO**         1.478.164     0,7        158.702     0,3       4.530     0,8        20.706     0,8
 **TOTAL** **201.062.789** **100** **45.444.386** **100** **547.465** **100** **2.488.680** **100**
+
+####8. As 10 cidades cearenses com *maior* percentual de motocicletas
+
+
+```r
+tabela <- filter(dados,UF=='CE') %>% 
+        mutate(percM = 100 * MOTOCICLETA/TOTAL) %>%
+        arrange(desc(percM)) %>%
+        select(MUNICIPIO,TOTAL,MOTOCICLETA,percM)
+panderOptions('table.split.table', Inf)
+pandoc.table(head(tabela,10), style = "simple",
+             caption = "**Cidades cearenses com maior percentual de motocicletas na frota**",
+             justify = c('left',rep('right',3)),
+             digits=5,round=1,big.mark=".",decimal.mark=',',
+             emphasize.strong.cols=1)
+```
+
+
+
+MUNICIPIO                       TOTAL   MOTOCICLETA   percM
+----------------------------- ------- ------------- -------
+**PEREIRO**                     7.342         6.180    84,2
+**ARATUBA**                     2.171         1.711    78,8
+**DEPUTADO IRAPUAN PINHEIRO**   2.051         1.616    78,8
+**AIUABA**                      2.082         1.624      78
+**QUIXELO**                     3.771         2.924    77,5
+**CHORO**                       1.963         1.516    77,2
+**ERERE**                         784           603    76,9
+**SOLONOPOLE**                  4.565         3.498    76,6
+**MIRAIMA**                     1.569         1.191    75,9
+**MILHA**                       3.840         2.901    75,5
+
+Table: **Cidades cearenses com maior percentual de motocicletas na frota**
+
+####9. As 10 cidades cearenses com *menor* percentual de motocicletas
+
+
+```r
+tabela <- arrange(tabela,percM)
+panderOptions('table.split.table', Inf)
+pandoc.table(head(tabela,10), style = "simple",
+             caption = "**Cidades cearenses com menor percentual de motocicletas na frota**",
+             justify = c('left',rep('right',3)),
+             digits=5,round=1,big.mark=".",decimal.mark=',',
+             emphasize.strong.cols=1)
+```
+
+
+
+MUNICIPIO        TOTAL   MOTOCICLETA   percM
+-------------- ------- ------------- -------
+**FORTALEZA**  908.074       229.154    25,2
+**EUSEBIO**     16.402         4.494    27,4
+**FORTIM**       2.105           712    33,8
+**IPAUMIRIM**    8.221         3.036    36,9
+**MARACANAU**   51.050        19.115    37,4
+**CASCAVEL**    13.655         5.127    37,5
+**BEBERIBE**     8.304         3.171    38,2
+**PACAJUS**     17.312         6.750      39
+**CHOROZINHO**   4.349         1.720    39,5
+**CAUCAIA**     64.701        25.707    39,7
+
+Table: **Cidades cearenses com menor percentual de motocicletas na frota**
+
+####10. As 10 cidades cearenses com maior numero de automoveis por 1000 habitantes
+
+
+```r
+tabela <- filter(dados,UF=='CE') %>% 
+        mutate(APM = 1000 * AUTOMOVEL/POPULACAO) %>%
+        select(MUNICIPIO,POPULACAO,AUTOMOVEL,APM) %>%
+        arrange(desc(APM))
+pandoc.table(head(tabela,10), style = "simple",
+             caption = "**Cidades cearenses com maior numero de automoveis por 1000 habitantes**",
+             justify = c('left',rep('right',3)),
+             digits=5,round=1,big.mark=".",decimal.mark=',',
+             emphasize.strong.cols=1)
+```
+
+
+
+MUNICIPIO               POPULACAO   AUTOMOVEL   APM
+--------------------- ----------- ----------- -----
+**IPAUMIRIM**              12.256       3.248   265
+**FORTALEZA**           2.551.806     511.109 200,3
+**EUSEBIO**                49.455       7.050 142,6
+**MARACANAU**             217.922      23.899 109,7
+**JUAZEIRO DO NORTE**     261.289      27.979 107,1
+**PACAJUS**                66.510       6.951 104,5
+**CRATO**                 126.591      13.095 103,4
+**TIANGUA**                72.110       7.294 101,2
+**CHOROZINHO**             19.187       1.876  97,8
+**LIMOEIRO DO NORTE**      57.372       5.500  95,9
+
+Table: **Cidades cearenses com maior numero de automoveis por 1000 habitantes**
+
+####11. As 10 cidades cearenses com maior numero de veículos por 1000 habitantes
+
+
+```r
+tabela <- filter(dados,UF=='CE') %>% 
+        mutate(VPM = 1000 * TOTAL/POPULACAO) %>%
+        select(MUNICIPIO,POPULACAO,TOTAL,VPM) %>%
+        arrange(desc(VPM))
+pandoc.table(head(tabela,10), style = "simple",
+             caption = "**Cidades cearenses com maior numero de veículos por 1000 habitantes**",
+             justify = c('left',rep('right',3)),
+             digits=5,round=1,big.mark=".",decimal.mark=',',
+             emphasize.strong.cols=1)
+```
+
+
+
+MUNICIPIO                   POPULACAO   TOTAL   VPM
+------------------------- ----------- ------- -----
+**IPAUMIRIM**                  12.256   8.221 670,8
+**TABULEIRO DO NORTE**         30.018  14.255 474,9
+**PEREIRO**                    16.063   7.342 457,1
+**LIMOEIRO DO NORTE**          57.372  23.882 416,3
+**RUSSAS**                     73.436  28.391 386,6
+**IGUATU**                    100.053  38.514 384,9
+**SOBRAL**                    197.663  72.730 367,9
+**TIANGUA**                    72.110  26.303 364,8
+**FORTALEZA**               2.551.806 908.074 355,9
+**SAO JOAO DO JAGUARIBE**       7.829   2.783 355,5
+
+Table: **Cidades cearenses com maior numero de veículos por 1000 habitantes**
