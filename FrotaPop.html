@@ -73,6 +73,7 @@ img {
 library(dplyr)
 library(stringr)
 library(knitr)
+library(pander)
 library(ggplot2)
 library(scales)
 options(scipen=1, digits=2, width=105)</code></pre>
@@ -90,9 +91,8 @@ dados &lt;- select(dados[estados],-c(ESTADO,CAPITAL))</code></pre>
 </div>
 <div id="caracteristicas-gerais" class="section level3">
 <h3>Características Gerais</h3>
-<ol style="list-style-type: decimal">
-<li>Para os estados: número de municípios, população, frota total, taxa de veículos por 1000 habitantes (VPM), frota de automóveis e taxa de automóveis por 1000 habitantes (APM). Lista em ordem decrescente de APM.</li>
-</ol>
+<div id="para-os-estados-numero-de-municipios-populacao-frota-total-taxa-de-veiculos-por-1000-habitantes-vpm-frota-de-automoveis-e-taxa-de-automoveis-por-1000-habitantes-apm.-lista-em-ordem-decrescente-de-apm." class="section level4">
+<h4>1. Para os estados: número de municípios, população, frota total, taxa de veículos por 1000 habitantes (VPM), frota de automóveis e taxa de automóveis por 1000 habitantes (APM). Lista em ordem decrescente de APM.</h4>
 <pre class="r"><code>tabela &lt;- group_by(dados,UF) %&gt;%
         summarise(Nmun = n(),
                   Populacao = sum(POPULACAO),
@@ -360,9 +360,9 @@ kable(tabela)</code></pre>
 </tr>
 </tbody>
 </table>
-<ol start="2" style="list-style-type: decimal">
-<li>Para as capitais: população, frota total, taxa de veículos por 1000 habitantes (VPM), frota de automóveis, taxa de automóveis por 1000 habitantes (APM), frota de motocicletas e taxa de motocicletas por 1000 habitantes (MPM). Lista em ordem decrescente de APM.</li>
-</ol>
+</div>
+<div id="para-as-capitais-populacao-frota-total-taxa-de-veiculos-por-1000-habitantes-vpm-frota-de-automoveis-taxa-de-automoveis-por-1000-habitantes-apm-frota-de-motocicletas-e-taxa-de-motocicletas-por-1000-habitantes-mpm.-lista-em-ordem-decrescente-de-apm." class="section level4">
+<h4>2. Para as capitais: população, frota total, taxa de veículos por 1000 habitantes (VPM), frota de automóveis, taxa de automóveis por 1000 habitantes (APM), frota de motocicletas e taxa de motocicletas por 1000 habitantes (MPM). Lista em ordem decrescente de APM.</h4>
 <pre class="r"><code>tabela &lt;- filter(dados, str_c(UF,MUNICIPIO,sep='-') %in% 
                          str_c(estados$SIGLA,estados$CAPITAL,sep='-')) %&gt;%
         mutate(VPM = 1000 * TOTAL/POPULACAO) %&gt;%
@@ -697,9 +697,9 @@ ggplot(data=tabela, aes(x=ordem, y=APM)) +
         xlab(&quot;Capitais&quot;) +
         ylab(&quot;Automóveis por 1000 Habitantes&quot;)</code></pre>
 <p><img src="data:image/png;base64,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" /></p>
-<ol start="3" style="list-style-type: decimal">
-<li>População e frota total, de automóveis e motocicletas das regiões</li>
-</ol>
+</div>
+<div id="populacao-e-frota-total-de-automoveis-e-motocicletas-das-regioes" class="section level4">
+<h4>3. População e frota total, de automóveis e motocicletas das regiões</h4>
 <pre class="r"><code>tabela &lt;- group_by(dados,REGIAO) %&gt;%
                 summarise(Populacao = sum(POPULACAO),
                   Veiculos = sum(TOTAL),
@@ -777,9 +777,9 @@ ggplot(data=tabela, aes(x=ordem, y=APM)) +
         xlab(&quot;Regiões&quot;) +
         ylab(&quot;Automóveis por 1000 Habitantes&quot;)</code></pre>
 <p><img src="data:image/png;base64,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" /></p>
-<ol start="4" style="list-style-type: decimal">
-<li>Lista das 20 cidades com maiores percentuais de motocicletas na frota. Ordem decrescente do percentual de motocicletas.</li>
-</ol>
+</div>
+<div id="lista-das-20-cidades-com-maiores-percentuais-de-motocicletas-na-frota.-ordem-decrescente-do-percentual-de-motocicletas." class="section level4">
+<h4>4. Lista das 20 cidades com maiores percentuais de motocicletas na frota. Ordem decrescente do percentual de motocicletas.</h4>
 <pre class="r"><code>tabela &lt;- mutate(dados,percM = 100 * MOTOCICLETA/TOTAL) %&gt;%
         arrange(desc(percM)) %&gt;%
         select(MUNICIPIO,UF,TOTAL,MOTOCICLETA,percM)
@@ -937,9 +937,9 @@ kable(tabela[1:20])</code></pre>
 </tr>
 </tbody>
 </table>
-<ol start="5" style="list-style-type: decimal">
-<li>Lista das 20 cidades com maiores taxas de automóveis por 1000 habitantes. Ordem decrescente de APM.</li>
-</ol>
+</div>
+<div id="lista-das-20-cidades-com-maiores-taxas-de-automoveis-por-1000-habitantes.-ordem-decrescente-de-apm." class="section level4">
+<h4>5. Lista das 20 cidades com maiores taxas de automóveis por 1000 habitantes. Ordem decrescente de APM.</h4>
 <pre class="r"><code>tabela &lt;- mutate(dados,APM = 1000 * AUTOMOVEL/POPULACAO) %&gt;%
         select(MUNICIPIO,UF,POPULACAO,AUTOMOVEL,APM) %&gt;%
         arrange(desc(APM))
@@ -1097,9 +1097,9 @@ kable(tabela[1:20])</code></pre>
 </tr>
 </tbody>
 </table>
-<ol start="6" style="list-style-type: decimal">
-<li>Relação completa dos estados, destacando o número de cidades nas quais a frota de motocicletas é maior do que a de automóveis.</li>
-</ol>
+</div>
+<div id="relacao-completa-dos-estados-destacando-o-numero-de-cidades-nas-quais-a-frota-de-motocicletas-e-maior-do-que-a-de-automoveis." class="section level4">
+<h4>6. Relação completa dos estados, destacando o número de cidades nas quais a frota de motocicletas é maior do que a de automóveis.</h4>
 <pre class="r"><code>tabela &lt;- mutate(dados,maismoto = (MOTOCICLETA&gt;AUTOMOVEL)) %&gt;%
         group_by(UF) %&gt;%
         summarise(Nmun=n(),
@@ -1282,9 +1282,9 @@ kable(tabela,caption = &quot;Cidades com mais motocicletas do que automóveis, p
 </tr>
 </tbody>
 </table>
-<ol start="7" style="list-style-type: decimal">
-<li>Relação completa dos estados, destacando a frota de certos tipos de veículos e quanto isso representa em relação ao país.</li>
-</ol>
+</div>
+<div id="relacao-completa-dos-estados-destacando-a-frota-de-certos-tipos-de-veiculos-e-quanto-isso-representa-em-relacao-ao-pais." class="section level4">
+<h4>7. Relação completa dos estados, destacando a frota de certos tipos de veículos e quanto isso representa em relação ao país.</h4>
 <pre class="r"><code>popBR &lt;- sum(dados$POPULACAO)
 frotaBR &lt;- sum(dados$TOTAL)
 autoBR &lt;- sum(dados$AUTOMOVEL)
@@ -1292,349 +1292,357 @@ oniBR &lt;- sum(dados$ONIBUS)
 camBR &lt;- sum(dados$CAMINHAO)
 tabela &lt;- group_by(dados,UF) %&gt;%
         summarise(Populacao = sum(POPULACAO),
-                  percPop = 100 * sum(POPULACAO)/popBR,
+                  pPop = 100 * sum(POPULACAO)/popBR,
                   Automoveis = sum(AUTOMOVEL),
-                  percAuto = 100 * sum(AUTOMOVEL)/autoBR,
+                  pAuto = 100 * sum(AUTOMOVEL)/autoBR,
                   Onibus = sum(ONIBUS),
-                  percOni = 100 * sum(ONIBUS)/oniBR,
+                  pOni = 100 * sum(ONIBUS)/oniBR,
                   Caminhoes = sum(CAMINHAO),
-                  percCam = 100 * sum(CAMINHAO)/camBR)
+                  pCam = 100 * sum(CAMINHAO)/camBR)
 Brasil &lt;- data.table(UF = 'TOTAL',
                      Populacao = popBR,
-                     percPop = 100,
+                     pPop = 100.0,
                      Automoveis = autoBR,
-                     percAuto = 100,
+                     pAuto = 100.0,
                      Onibus = oniBR,
-                     percOni = 100,
+                     pOni = 100.0,
                      Caminhoes = camBR,
-                     percCam = 100)
+                     pCam = 100.0)
 tabela&lt;-rbind(tabela,Brasil)
-kable(tabela,digits=1)</code></pre>
+linha=nrow(tabela)
+panderOptions('knitr.auto.asis', FALSE)
+panderOptions('table.split.table', Inf)
+pandoc.table(tabela, style = &quot;simple&quot;,
+             justify = c('center',rep('right',8)),
+             digits=12,round=1,big.mark=&quot;.&quot;,decimal.mark=',',
+             emphasize.strong.rows=linha,
+             emphasize.strong.cols=1)</code></pre>
 <table>
 <thead>
 <tr class="header">
-<th align="left">UF</th>
+<th align="center">UF</th>
 <th align="right">Populacao</th>
-<th align="right">percPop</th>
+<th align="right">pPop</th>
 <th align="right">Automoveis</th>
-<th align="right">percAuto</th>
+<th align="right">pAuto</th>
 <th align="right">Onibus</th>
-<th align="right">percOni</th>
+<th align="right">pOni</th>
 <th align="right">Caminhoes</th>
-<th align="right">percCam</th>
+<th align="right">pCam</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">AC</td>
-<td align="right">7.8e+05</td>
-<td align="right">0.4</td>
-<td align="right">67461</td>
-<td align="right">0.1</td>
+<td align="center"><strong>AC</strong></td>
+<td align="right">776.463</td>
+<td align="right">0,4</td>
+<td align="right">67.461</td>
+<td align="right">0,1</td>
 <td align="right">921</td>
-<td align="right">0.2</td>
-<td align="right">6297</td>
-<td align="right">0.3</td>
+<td align="right">0,2</td>
+<td align="right">6.297</td>
+<td align="right">0,3</td>
 </tr>
 <tr class="even">
-<td align="left">AL</td>
-<td align="right">3.3e+06</td>
-<td align="right">1.6</td>
-<td align="right">275556</td>
-<td align="right">0.6</td>
-<td align="right">6098</td>
-<td align="right">1.1</td>
-<td align="right">18949</td>
-<td align="right">0.8</td>
+<td align="center"><strong>AL</strong></td>
+<td align="right">3.300.935</td>
+<td align="right">1,6</td>
+<td align="right">275.556</td>
+<td align="right">0,6</td>
+<td align="right">6.098</td>
+<td align="right">1,1</td>
+<td align="right">18.949</td>
+<td align="right">0,8</td>
 </tr>
 <tr class="odd">
-<td align="left">AM</td>
-<td align="right">3.8e+06</td>
-<td align="right">1.9</td>
-<td align="right">325698</td>
-<td align="right">0.7</td>
-<td align="right">8517</td>
-<td align="right">1.6</td>
-<td align="right">19023</td>
-<td align="right">0.8</td>
+<td align="center"><strong>AM</strong></td>
+<td align="right">3.807.921</td>
+<td align="right">1,9</td>
+<td align="right">325.698</td>
+<td align="right">0,7</td>
+<td align="right">8.517</td>
+<td align="right">1,6</td>
+<td align="right">19.023</td>
+<td align="right">0,8</td>
 </tr>
 <tr class="even">
-<td align="left">AP</td>
-<td align="right">7.3e+05</td>
-<td align="right">0.4</td>
-<td align="right">64386</td>
-<td align="right">0.1</td>
+<td align="center"><strong>AP</strong></td>
+<td align="right">734.996</td>
+<td align="right">0,4</td>
+<td align="right">64.386</td>
+<td align="right">0,1</td>
 <td align="right">917</td>
-<td align="right">0.2</td>
-<td align="right">3678</td>
-<td align="right">0.1</td>
+<td align="right">0,2</td>
+<td align="right">3.678</td>
+<td align="right">0,1</td>
 </tr>
 <tr class="odd">
-<td align="left">BA</td>
-<td align="right">1.5e+07</td>
-<td align="right">7.5</td>
-<td align="right">1415342</td>
-<td align="right">3.1</td>
-<td align="right">34421</td>
-<td align="right">6.3</td>
-<td align="right">106213</td>
-<td align="right">4.3</td>
+<td align="center"><strong>BA</strong></td>
+<td align="right">15.044.137</td>
+<td align="right">7,5</td>
+<td align="right">1.415.342</td>
+<td align="right">3,1</td>
+<td align="right">34.421</td>
+<td align="right">6,3</td>
+<td align="right">106.213</td>
+<td align="right">4,3</td>
 </tr>
 <tr class="even">
-<td align="left">CE</td>
-<td align="right">8.8e+06</td>
-<td align="right">4.4</td>
-<td align="right">881571</td>
-<td align="right">1.9</td>
-<td align="right">14014</td>
-<td align="right">2.6</td>
-<td align="right">61047</td>
-<td align="right">2.5</td>
+<td align="center"><strong>CE</strong></td>
+<td align="right">8.778.576</td>
+<td align="right">4,4</td>
+<td align="right">881.571</td>
+<td align="right">1,9</td>
+<td align="right">14.014</td>
+<td align="right">2,6</td>
+<td align="right">61.047</td>
+<td align="right">2,5</td>
 </tr>
 <tr class="odd">
-<td align="left">DF</td>
-<td align="right">2.8e+06</td>
-<td align="right">1.4</td>
-<td align="right">1099719</td>
-<td align="right">2.4</td>
-<td align="right">10755</td>
-<td align="right">2.0</td>
-<td align="right">21801</td>
-<td align="right">0.9</td>
+<td align="center"><strong>DF</strong></td>
+<td align="right">2.789.761</td>
+<td align="right">1,4</td>
+<td align="right">1.099.719</td>
+<td align="right">2,4</td>
+<td align="right">10.755</td>
+<td align="right">2</td>
+<td align="right">21.801</td>
+<td align="right">0,9</td>
 </tr>
 <tr class="even">
-<td align="left">ES</td>
-<td align="right">3.8e+06</td>
-<td align="right">1.9</td>
-<td align="right">797528</td>
-<td align="right">1.8</td>
-<td align="right">13555</td>
-<td align="right">2.5</td>
-<td align="right">64749</td>
-<td align="right">2.6</td>
+<td align="center"><strong>ES</strong></td>
+<td align="right">3.839.366</td>
+<td align="right">1,9</td>
+<td align="right">797.528</td>
+<td align="right">1,8</td>
+<td align="right">13.555</td>
+<td align="right">2,5</td>
+<td align="right">64.749</td>
+<td align="right">2,6</td>
 </tr>
 <tr class="odd">
-<td align="left">GO</td>
-<td align="right">6.4e+06</td>
-<td align="right">3.2</td>
-<td align="right">1512266</td>
-<td align="right">3.3</td>
-<td align="right">19507</td>
-<td align="right">3.6</td>
-<td align="right">100123</td>
-<td align="right">4.0</td>
+<td align="center"><strong>GO</strong></td>
+<td align="right">6.434.048</td>
+<td align="right">3,2</td>
+<td align="right">1.512.266</td>
+<td align="right">3,3</td>
+<td align="right">19.507</td>
+<td align="right">3,6</td>
+<td align="right">100.123</td>
+<td align="right">4</td>
 </tr>
 <tr class="even">
-<td align="left">MA</td>
-<td align="right">6.8e+06</td>
-<td align="right">3.4</td>
-<td align="right">335793</td>
-<td align="right">0.7</td>
-<td align="right">6868</td>
-<td align="right">1.3</td>
-<td align="right">33214</td>
-<td align="right">1.3</td>
+<td align="center"><strong>MA</strong></td>
+<td align="right">6.794.301</td>
+<td align="right">3,4</td>
+<td align="right">335.793</td>
+<td align="right">0,7</td>
+<td align="right">6.868</td>
+<td align="right">1,3</td>
+<td align="right">33.214</td>
+<td align="right">1,3</td>
 </tr>
 <tr class="odd">
-<td align="left">MG</td>
-<td align="right">2.1e+07</td>
-<td align="right">10.2</td>
-<td align="right">4926454</td>
-<td align="right">10.8</td>
-<td align="right">67366</td>
-<td align="right">12.3</td>
-<td align="right">299132</td>
-<td align="right">12.0</td>
+<td align="center"><strong>MG</strong></td>
+<td align="right">20.593.356</td>
+<td align="right">10,2</td>
+<td align="right">4.926.454</td>
+<td align="right">10,8</td>
+<td align="right">67.366</td>
+<td align="right">12,3</td>
+<td align="right">299.132</td>
+<td align="right">12</td>
 </tr>
 <tr class="even">
-<td align="left">MS</td>
-<td align="right">2.6e+06</td>
-<td align="right">1.3</td>
-<td align="right">580821</td>
-<td align="right">1.3</td>
-<td align="right">8199</td>
-<td align="right">1.5</td>
-<td align="right">45487</td>
-<td align="right">1.8</td>
+<td align="center"><strong>MS</strong></td>
+<td align="right">2.587.269</td>
+<td align="right">1,3</td>
+<td align="right">580.821</td>
+<td align="right">1,3</td>
+<td align="right">8.199</td>
+<td align="right">1,5</td>
+<td align="right">45.487</td>
+<td align="right">1,8</td>
 </tr>
 <tr class="odd">
-<td align="left">MT</td>
-<td align="right">3.2e+06</td>
-<td align="right">1.6</td>
-<td align="right">543484</td>
-<td align="right">1.2</td>
-<td align="right">9620</td>
-<td align="right">1.8</td>
-<td align="right">59982</td>
-<td align="right">2.4</td>
+<td align="center"><strong>MT</strong></td>
+<td align="right">3.182.113</td>
+<td align="right">1,6</td>
+<td align="right">543.484</td>
+<td align="right">1,2</td>
+<td align="right">9.620</td>
+<td align="right">1,8</td>
+<td align="right">59.982</td>
+<td align="right">2,4</td>
 </tr>
 <tr class="even">
-<td align="left">PA</td>
-<td align="right">8.0e+06</td>
-<td align="right">4.0</td>
-<td align="right">455649</td>
-<td align="right">1.0</td>
-<td align="right">14414</td>
-<td align="right">2.6</td>
-<td align="right">50422</td>
-<td align="right">2.0</td>
+<td align="center"><strong>PA</strong></td>
+<td align="right">7.999.729</td>
+<td align="right">4</td>
+<td align="right">455.649</td>
+<td align="right">1</td>
+<td align="right">14.414</td>
+<td align="right">2,6</td>
+<td align="right">50.422</td>
+<td align="right">2</td>
 </tr>
 <tr class="odd">
-<td align="left">PB</td>
-<td align="right">3.9e+06</td>
-<td align="right">1.9</td>
-<td align="right">407624</td>
-<td align="right">0.9</td>
-<td align="right">6520</td>
-<td align="right">1.2</td>
-<td align="right">25508</td>
-<td align="right">1.0</td>
+<td align="center"><strong>PB</strong></td>
+<td align="right">3.914.421</td>
+<td align="right">1,9</td>
+<td align="right">407.624</td>
+<td align="right">0,9</td>
+<td align="right">6.520</td>
+<td align="right">1,2</td>
+<td align="right">25.508</td>
+<td align="right">1</td>
 </tr>
 <tr class="even">
-<td align="left">PE</td>
-<td align="right">9.2e+06</td>
-<td align="right">4.6</td>
-<td align="right">1088338</td>
-<td align="right">2.4</td>
-<td align="right">17903</td>
-<td align="right">3.3</td>
-<td align="right">83632</td>
-<td align="right">3.4</td>
+<td align="center"><strong>PE</strong></td>
+<td align="right">9.208.550</td>
+<td align="right">4,6</td>
+<td align="right">1.088.338</td>
+<td align="right">2,4</td>
+<td align="right">17.903</td>
+<td align="right">3,3</td>
+<td align="right">83.632</td>
+<td align="right">3,4</td>
 </tr>
 <tr class="odd">
-<td align="left">PI</td>
-<td align="right">3.2e+06</td>
-<td align="right">1.6</td>
-<td align="right">255114</td>
-<td align="right">0.6</td>
-<td align="right">5295</td>
-<td align="right">1.0</td>
-<td align="right">22737</td>
-<td align="right">0.9</td>
+<td align="center"><strong>PI</strong></td>
+<td align="right">3.184.166</td>
+<td align="right">1,6</td>
+<td align="right">255.114</td>
+<td align="right">0,6</td>
+<td align="right">5.295</td>
+<td align="right">1</td>
+<td align="right">22.737</td>
+<td align="right">0,9</td>
 </tr>
 <tr class="even">
-<td align="left">PR</td>
-<td align="right">1.1e+07</td>
-<td align="right">5.5</td>
-<td align="right">3759306</td>
-<td align="right">8.3</td>
-<td align="right">36912</td>
-<td align="right">6.7</td>
-<td align="right">246111</td>
-<td align="right">9.9</td>
+<td align="center"><strong>PR</strong></td>
+<td align="right">10.997.465</td>
+<td align="right">5,5</td>
+<td align="right">3.759.306</td>
+<td align="right">8,3</td>
+<td align="right">36.912</td>
+<td align="right">6,7</td>
+<td align="right">246.111</td>
+<td align="right">9,9</td>
 </tr>
 <tr class="odd">
-<td align="left">RJ</td>
-<td align="right">1.6e+07</td>
-<td align="right">8.1</td>
-<td align="right">3839651</td>
-<td align="right">8.4</td>
-<td align="right">44316</td>
-<td align="right">8.1</td>
-<td align="right">132959</td>
-<td align="right">5.3</td>
+<td align="center"><strong>RJ</strong></td>
+<td align="right">16.369.179</td>
+<td align="right">8,1</td>
+<td align="right">3.839.651</td>
+<td align="right">8,4</td>
+<td align="right">44.316</td>
+<td align="right">8,1</td>
+<td align="right">132.959</td>
+<td align="right">5,3</td>
 </tr>
 <tr class="even">
-<td align="left">RN</td>
-<td align="right">3.4e+06</td>
-<td align="right">1.7</td>
-<td align="right">430289</td>
-<td align="right">0.9</td>
-<td align="right">5716</td>
-<td align="right">1.0</td>
-<td align="right">27473</td>
-<td align="right">1.1</td>
+<td align="center"><strong>RN</strong></td>
+<td align="right">3.373.959</td>
+<td align="right">1,7</td>
+<td align="right">430.289</td>
+<td align="right">0,9</td>
+<td align="right">5.716</td>
+<td align="right">1</td>
+<td align="right">27.473</td>
+<td align="right">1,1</td>
 </tr>
 <tr class="odd">
-<td align="left">RO</td>
-<td align="right">1.7e+06</td>
-<td align="right">0.9</td>
-<td align="right">212652</td>
-<td align="right">0.5</td>
-<td align="right">4876</td>
-<td align="right">0.9</td>
-<td align="right">26735</td>
-<td align="right">1.1</td>
+<td align="center"><strong>RO</strong></td>
+<td align="right">1.728.214</td>
+<td align="right">0,9</td>
+<td align="right">212.652</td>
+<td align="right">0,5</td>
+<td align="right">4.876</td>
+<td align="right">0,9</td>
+<td align="right">26.735</td>
+<td align="right">1,1</td>
 </tr>
 <tr class="even">
-<td align="left">RR</td>
-<td align="right">4.9e+05</td>
-<td align="right">0.2</td>
-<td align="right">53704</td>
-<td align="right">0.1</td>
+<td align="center"><strong>RR</strong></td>
+<td align="right">488.072</td>
+<td align="right">0,2</td>
+<td align="right">53.704</td>
+<td align="right">0,1</td>
 <td align="right">825</td>
-<td align="right">0.2</td>
-<td align="right">3881</td>
-<td align="right">0.2</td>
+<td align="right">0,2</td>
+<td align="right">3.881</td>
+<td align="right">0,2</td>
 </tr>
 <tr class="odd">
-<td align="left">RS</td>
-<td align="right">1.1e+07</td>
-<td align="right">5.6</td>
-<td align="right">3622309</td>
-<td align="right">8.0</td>
-<td align="right">36843</td>
-<td align="right">6.7</td>
-<td align="right">206979</td>
-<td align="right">8.3</td>
+<td align="center"><strong>RS</strong></td>
+<td align="right">11.164.043</td>
+<td align="right">5,6</td>
+<td align="right">3.622.309</td>
+<td align="right">8</td>
+<td align="right">36.843</td>
+<td align="right">6,7</td>
+<td align="right">206.979</td>
+<td align="right">8,3</td>
 </tr>
 <tr class="even">
-<td align="left">SC</td>
-<td align="right">6.6e+06</td>
-<td align="right">3.3</td>
-<td align="right">2428891</td>
-<td align="right">5.3</td>
-<td align="right">17606</td>
-<td align="right">3.2</td>
-<td align="right">139545</td>
-<td align="right">5.6</td>
+<td align="center"><strong>SC</strong></td>
+<td align="right">6.634.254</td>
+<td align="right">3,3</td>
+<td align="right">2.428.891</td>
+<td align="right">5,3</td>
+<td align="right">17.606</td>
+<td align="right">3,2</td>
+<td align="right">139.545</td>
+<td align="right">5,6</td>
 </tr>
 <tr class="odd">
-<td align="left">SE</td>
-<td align="right">2.2e+06</td>
-<td align="right">1.1</td>
-<td align="right">262664</td>
-<td align="right">0.6</td>
-<td align="right">5785</td>
-<td align="right">1.1</td>
-<td align="right">19056</td>
-<td align="right">0.8</td>
+<td align="center"><strong>SE</strong></td>
+<td align="right">2.195.662</td>
+<td align="right">1,1</td>
+<td align="right">262.664</td>
+<td align="right">0,6</td>
+<td align="right">5.785</td>
+<td align="right">1,1</td>
+<td align="right">19.056</td>
+<td align="right">0,8</td>
 </tr>
 <tr class="even">
-<td align="left">SP</td>
-<td align="right">4.4e+07</td>
-<td align="right">21.7</td>
-<td align="right">15643414</td>
-<td align="right">34.4</td>
-<td align="right">145166</td>
-<td align="right">26.5</td>
-<td align="right">643241</td>
-<td align="right">25.8</td>
+<td align="center"><strong>SP</strong></td>
+<td align="right">43.663.669</td>
+<td align="right">21,7</td>
+<td align="right">15.643.414</td>
+<td align="right">34,4</td>
+<td align="right">145.166</td>
+<td align="right">26,5</td>
+<td align="right">643.241</td>
+<td align="right">25,8</td>
 </tr>
 <tr class="odd">
-<td align="left">TO</td>
-<td align="right">1.5e+06</td>
-<td align="right">0.7</td>
-<td align="right">158702</td>
-<td align="right">0.3</td>
-<td align="right">4530</td>
-<td align="right">0.8</td>
-<td align="right">20706</td>
-<td align="right">0.8</td>
+<td align="center"><strong>TO</strong></td>
+<td align="right">1.478.164</td>
+<td align="right">0,7</td>
+<td align="right">158.702</td>
+<td align="right">0,3</td>
+<td align="right">4.530</td>
+<td align="right">0,8</td>
+<td align="right">20.706</td>
+<td align="right">0,8</td>
 </tr>
 <tr class="even">
-<td align="left">TOTAL</td>
-<td align="right">2.0e+08</td>
-<td align="right">100.0</td>
-<td align="right">45444386</td>
-<td align="right">100.0</td>
-<td align="right">547465</td>
-<td align="right">100.0</td>
-<td align="right">2488680</td>
-<td align="right">100.0</td>
+<td align="center"><strong>TOTAL</strong></td>
+<td align="right"><strong>201.062.789</strong></td>
+<td align="right"><strong>100</strong></td>
+<td align="right"><strong>45.444.386</strong></td>
+<td align="right"><strong>100</strong></td>
+<td align="right"><strong>547.465</strong></td>
+<td align="right"><strong>100</strong></td>
+<td align="right"><strong>2.488.680</strong></td>
+<td align="right"><strong>100</strong></td>
 </tr>
 </tbody>
 </table>
+</div>
 </div>
 
 

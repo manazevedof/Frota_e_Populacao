@@ -5,6 +5,7 @@ date: "Domingo, 24/05/2015"
 output:
   html_document:
     keep_md: yes
+  pdf_document: default
   word_document: default
 ---
 
@@ -15,6 +16,7 @@ library(data.table)
 library(dplyr)
 library(stringr)
 library(knitr)
+library(pander)
 library(ggplot2)
 library(scales)
 options(scipen=1, digits=2, width=105)
@@ -37,7 +39,7 @@ dados <- select(dados[estados],-c(ESTADO,CAPITAL))
 
 ###Características Gerais
 
-1. Para os estados: número de municípios, população, frota total, taxa de veículos por 1000 habitantes (VPM), frota de automóveis e taxa de automóveis por 1000 habitantes (APM). Lista em ordem decrescente de APM.
+####1. Para os estados: número de municípios, população, frota total, taxa de veículos por 1000 habitantes (VPM), frota de automóveis e taxa de automóveis por 1000 habitantes (APM). Lista em ordem decrescente de APM.
 
 ```{r}
 tabela <- group_by(dados,UF) %>%
@@ -51,7 +53,7 @@ tabela <- group_by(dados,UF) %>%
 kable(tabela)
 ```
 
-2. Para as capitais: população, frota total, taxa de veículos por 1000 habitantes (VPM), frota de automóveis, taxa de automóveis por 1000 habitantes (APM), frota de motocicletas e taxa de motocicletas por 1000 habitantes (MPM). Lista em ordem decrescente de APM.
+####2. Para as capitais: população, frota total, taxa de veículos por 1000 habitantes (VPM), frota de automóveis, taxa de automóveis por 1000 habitantes (APM), frota de motocicletas e taxa de motocicletas por 1000 habitantes (MPM). Lista em ordem decrescente de APM.
 
 ```{r}
 tabela <- filter(dados, str_c(UF,MUNICIPIO,sep='-') %in% 
@@ -76,7 +78,7 @@ ggplot(data=tabela, aes(x=ordem, y=APM)) +
 
 ```
 
-3. População e frota total, de automóveis e motocicletas das regiões
+####3. População e frota total, de automóveis e motocicletas das regiões
 
 ```{r}
 tabela <- group_by(dados,REGIAO) %>%
@@ -97,7 +99,7 @@ ggplot(data=tabela, aes(x=ordem, y=APM)) +
         ylab("Automóveis por 1000 Habitantes")
 ```
 
-4. Lista das 20 cidades com maiores percentuais de motocicletas na frota. Ordem decrescente do percentual de motocicletas.
+####4. Lista das 20 cidades com maiores percentuais de motocicletas na frota. Ordem decrescente do percentual de motocicletas.
 
 ```{r}
 tabela <- mutate(dados,percM = 100 * MOTOCICLETA/TOTAL) %>%
@@ -107,7 +109,7 @@ kable(tabela[1:20])
 
 ```
 
-5. Lista das 20 cidades com maiores taxas de automóveis por 1000 habitantes. Ordem decrescente de APM.
+####5. Lista das 20 cidades com maiores taxas de automóveis por 1000 habitantes. Ordem decrescente de APM.
 
 ```{r}
 tabela <- mutate(dados,APM = 1000 * AUTOMOVEL/POPULACAO) %>%
@@ -116,7 +118,7 @@ tabela <- mutate(dados,APM = 1000 * AUTOMOVEL/POPULACAO) %>%
 kable(tabela[1:20])
 ```
 
-6. Relação completa dos estados, destacando o número de cidades nas quais a frota de motocicletas é maior do que a de automóveis.
+####6. Relação completa dos estados, destacando o número de cidades nas quais a frota de motocicletas é maior do que a de automóveis.
 
 ```{r}
 tabela <- mutate(dados,maismoto = (MOTOCICLETA>AUTOMOVEL)) %>%
@@ -129,9 +131,9 @@ kable(tabela,caption = "Cidades com mais motocicletas do que automóveis, por est
 
 ```
 
-7. Relação completa dos estados, destacando a frota de certos tipos de veículos e quanto isso representa em relação ao país.
+####7. Relação completa dos estados, destacando a frota de certos tipos de veículos e quanto isso representa em relação ao país.
 
-```{r}
+```{r, results='asis'}
 popBR <- sum(dados$POPULACAO)
 frotaBR <- sum(dados$TOTAL)
 autoBR <- sum(dados$AUTOMOVEL)
@@ -139,22 +141,30 @@ oniBR <- sum(dados$ONIBUS)
 camBR <- sum(dados$CAMINHAO)
 tabela <- group_by(dados,UF) %>%
         summarise(Populacao = sum(POPULACAO),
-                  percPop = 100 * sum(POPULACAO)/popBR,
+                  pPop = 100 * sum(POPULACAO)/popBR,
                   Automoveis = sum(AUTOMOVEL),
-                  percAuto = 100 * sum(AUTOMOVEL)/autoBR,
+                  pAuto = 100 * sum(AUTOMOVEL)/autoBR,
                   Onibus = sum(ONIBUS),
-                  percOni = 100 * sum(ONIBUS)/oniBR,
+                  pOni = 100 * sum(ONIBUS)/oniBR,
                   Caminhoes = sum(CAMINHAO),
-                  percCam = 100 * sum(CAMINHAO)/camBR)
+                  pCam = 100 * sum(CAMINHAO)/camBR)
 Brasil <- data.table(UF = 'TOTAL',
                      Populacao = popBR,
-                     percPop = 100,
+                     pPop = 100.0,
                      Automoveis = autoBR,
-                     percAuto = 100,
+                     pAuto = 100.0,
                      Onibus = oniBR,
-                     percOni = 100,
+                     pOni = 100.0,
                      Caminhoes = camBR,
-                     percCam = 100)
+                     pCam = 100.0)
 tabela<-rbind(tabela,Brasil)
-kable(tabela,digits=1)
+linha=nrow(tabela)
+panderOptions('knitr.auto.asis', FALSE)
+panderOptions('table.split.table', Inf)
+pandoc.table(tabela, style = "simple",
+             justify = c('center',rep('right',8)),
+             digits=12,round=1,big.mark=".",decimal.mark=',',
+             emphasize.strong.rows=linha,
+             emphasize.strong.cols=1)
+
 ```

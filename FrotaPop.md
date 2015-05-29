@@ -10,6 +10,7 @@ library(data.table)
 library(dplyr)
 library(stringr)
 library(knitr)
+library(pander)
 library(ggplot2)
 library(scales)
 options(scipen=1, digits=2, width=105)
@@ -33,7 +34,7 @@ dados <- select(dados[estados],-c(ESTADO,CAPITAL))
 
 ###Características Gerais
 
-1. Para os estados: número de municípios, população, frota total, taxa de veículos por 1000 habitantes (VPM), frota de automóveis e taxa de automóveis por 1000 habitantes (APM). Lista em ordem decrescente de APM.
+####1. Para os estados: número de municípios, população, frota total, taxa de veículos por 1000 habitantes (VPM), frota de automóveis e taxa de automóveis por 1000 habitantes (APM). Lista em ordem decrescente de APM.
 
 
 ```r
@@ -80,7 +81,7 @@ PI     224     3184166     855445   269       255114    80
 PA     144     7999729    1428355   179       455649    57
 MA     217     6794301    1215478   179       335793    49
 
-2. Para as capitais: população, frota total, taxa de veículos por 1000 habitantes (VPM), frota de automóveis, taxa de automóveis por 1000 habitantes (APM), frota de motocicletas e taxa de motocicletas por 1000 habitantes (MPM). Lista em ordem decrescente de APM.
+####2. Para as capitais: população, frota total, taxa de veículos por 1000 habitantes (VPM), frota de automóveis, taxa de automóveis por 1000 habitantes (APM), frota de motocicletas e taxa de motocicletas por 1000 habitantes (MPM). Lista em ordem decrescente de APM.
 
 
 ```r
@@ -142,7 +143,7 @@ ggplot(data=tabela, aes(x=ordem, y=APM)) +
 
 ![](FrotaPop_files/figure-html/unnamed-chunk-4-1.png) 
 
-3. População e frota total, de automóveis e motocicletas das regiões
+####3. População e frota total, de automóveis e motocicletas das regiões
 
 
 ```r
@@ -179,7 +180,7 @@ ggplot(data=tabela, aes(x=ordem, y=APM)) +
 
 ![](FrotaPop_files/figure-html/unnamed-chunk-5-1.png) 
 
-4. Lista das 20 cidades com maiores percentuais de motocicletas na frota. Ordem decrescente do percentual de motocicletas.
+####4. Lista das 20 cidades com maiores percentuais de motocicletas na frota. Ordem decrescente do percentual de motocicletas.
 
 
 ```r
@@ -214,7 +215,7 @@ PARNAGUA                       PI      784           638      81
 PASSAGEM FRANCA                MA     2132          1726      81
 SAO RAIMUNDO DO DOCA BEZERRA   MA      483           391      81
 
-5. Lista das 20 cidades com maiores taxas de automóveis por 1000 habitantes. Ordem decrescente de APM.
+####5. Lista das 20 cidades com maiores taxas de automóveis por 1000 habitantes. Ordem decrescente de APM.
 
 
 ```r
@@ -249,7 +250,7 @@ CASCA                          RS         8993        4037   449
 NOVA PETROPOLIS                RS        20126        8981   446
 BELO HORIZONTE                 MG      2479165     1101919   444
 
-6. Relação completa dos estados, destacando o número de cidades nas quais a frota de motocicletas é maior do que a de automóveis.
+####6. Relação completa dos estados, destacando o número de cidades nas quais a frota de motocicletas é maior do que a de automóveis.
 
 
 ```r
@@ -296,7 +297,7 @@ SE      75         55     73.33
 SP     645          1      0.16
 TO     139        131     94.24
 
-7. Relação completa dos estados, destacando a frota de certos tipos de veículos e quanto isso representa em relação ao país.
+####7. Relação completa dos estados, destacando a frota de certos tipos de veículos e quanto isso representa em relação ao país.
 
 
 ```r
@@ -307,55 +308,62 @@ oniBR <- sum(dados$ONIBUS)
 camBR <- sum(dados$CAMINHAO)
 tabela <- group_by(dados,UF) %>%
         summarise(Populacao = sum(POPULACAO),
-                  percPop = 100 * sum(POPULACAO)/popBR,
+                  pPop = 100 * sum(POPULACAO)/popBR,
                   Automoveis = sum(AUTOMOVEL),
-                  percAuto = 100 * sum(AUTOMOVEL)/autoBR,
+                  pAuto = 100 * sum(AUTOMOVEL)/autoBR,
                   Onibus = sum(ONIBUS),
-                  percOni = 100 * sum(ONIBUS)/oniBR,
+                  pOni = 100 * sum(ONIBUS)/oniBR,
                   Caminhoes = sum(CAMINHAO),
-                  percCam = 100 * sum(CAMINHAO)/camBR)
+                  pCam = 100 * sum(CAMINHAO)/camBR)
 Brasil <- data.table(UF = 'TOTAL',
                      Populacao = popBR,
-                     percPop = 100,
+                     pPop = 100.0,
                      Automoveis = autoBR,
-                     percAuto = 100,
+                     pAuto = 100.0,
                      Onibus = oniBR,
-                     percOni = 100,
+                     pOni = 100.0,
                      Caminhoes = camBR,
-                     percCam = 100)
+                     pCam = 100.0)
 tabela<-rbind(tabela,Brasil)
-kable(tabela,digits=1)
+linha=nrow(tabela)
+panderOptions('knitr.auto.asis', FALSE)
+panderOptions('table.split.table', Inf)
+pandoc.table(tabela, style = "simple",
+             justify = c('center',rep('right',8)),
+             digits=12,round=1,big.mark=".",decimal.mark=',',
+             emphasize.strong.rows=linha,
+             emphasize.strong.cols=1)
 ```
 
 
 
-UF       Populacao   percPop   Automoveis   percAuto   Onibus   percOni   Caminhoes   percCam
-------  ----------  --------  -----------  ---------  -------  --------  ----------  --------
-AC         7.8e+05       0.4        67461        0.1      921       0.2        6297       0.3
-AL         3.3e+06       1.6       275556        0.6     6098       1.1       18949       0.8
-AM         3.8e+06       1.9       325698        0.7     8517       1.6       19023       0.8
-AP         7.3e+05       0.4        64386        0.1      917       0.2        3678       0.1
-BA         1.5e+07       7.5      1415342        3.1    34421       6.3      106213       4.3
-CE         8.8e+06       4.4       881571        1.9    14014       2.6       61047       2.5
-DF         2.8e+06       1.4      1099719        2.4    10755       2.0       21801       0.9
-ES         3.8e+06       1.9       797528        1.8    13555       2.5       64749       2.6
-GO         6.4e+06       3.2      1512266        3.3    19507       3.6      100123       4.0
-MA         6.8e+06       3.4       335793        0.7     6868       1.3       33214       1.3
-MG         2.1e+07      10.2      4926454       10.8    67366      12.3      299132      12.0
-MS         2.6e+06       1.3       580821        1.3     8199       1.5       45487       1.8
-MT         3.2e+06       1.6       543484        1.2     9620       1.8       59982       2.4
-PA         8.0e+06       4.0       455649        1.0    14414       2.6       50422       2.0
-PB         3.9e+06       1.9       407624        0.9     6520       1.2       25508       1.0
-PE         9.2e+06       4.6      1088338        2.4    17903       3.3       83632       3.4
-PI         3.2e+06       1.6       255114        0.6     5295       1.0       22737       0.9
-PR         1.1e+07       5.5      3759306        8.3    36912       6.7      246111       9.9
-RJ         1.6e+07       8.1      3839651        8.4    44316       8.1      132959       5.3
-RN         3.4e+06       1.7       430289        0.9     5716       1.0       27473       1.1
-RO         1.7e+06       0.9       212652        0.5     4876       0.9       26735       1.1
-RR         4.9e+05       0.2        53704        0.1      825       0.2        3881       0.2
-RS         1.1e+07       5.6      3622309        8.0    36843       6.7      206979       8.3
-SC         6.6e+06       3.3      2428891        5.3    17606       3.2      139545       5.6
-SE         2.2e+06       1.1       262664        0.6     5785       1.1       19056       0.8
-SP         4.4e+07      21.7     15643414       34.4   145166      26.5      643241      25.8
-TO         1.5e+06       0.7       158702        0.3     4530       0.8       20706       0.8
-TOTAL      2.0e+08     100.0     45444386      100.0   547465     100.0     2488680     100.0
+   UF           Populacao    pPop     Automoveis   pAuto      Onibus    pOni     Caminhoes    pCam
+--------- --------------- ------- -------------- ------- ----------- ------- ------------- -------
+ **AC**           776.463     0,4         67.461     0,1         921     0,2         6.297     0,3
+ **AL**         3.300.935     1,6        275.556     0,6       6.098     1,1        18.949     0,8
+ **AM**         3.807.921     1,9        325.698     0,7       8.517     1,6        19.023     0,8
+ **AP**           734.996     0,4         64.386     0,1         917     0,2         3.678     0,1
+ **BA**        15.044.137     7,5      1.415.342     3,1      34.421     6,3       106.213     4,3
+ **CE**         8.778.576     4,4        881.571     1,9      14.014     2,6        61.047     2,5
+ **DF**         2.789.761     1,4      1.099.719     2,4      10.755       2        21.801     0,9
+ **ES**         3.839.366     1,9        797.528     1,8      13.555     2,5        64.749     2,6
+ **GO**         6.434.048     3,2      1.512.266     3,3      19.507     3,6       100.123       4
+ **MA**         6.794.301     3,4        335.793     0,7       6.868     1,3        33.214     1,3
+ **MG**        20.593.356    10,2      4.926.454    10,8      67.366    12,3       299.132      12
+ **MS**         2.587.269     1,3        580.821     1,3       8.199     1,5        45.487     1,8
+ **MT**         3.182.113     1,6        543.484     1,2       9.620     1,8        59.982     2,4
+ **PA**         7.999.729       4        455.649       1      14.414     2,6        50.422       2
+ **PB**         3.914.421     1,9        407.624     0,9       6.520     1,2        25.508       1
+ **PE**         9.208.550     4,6      1.088.338     2,4      17.903     3,3        83.632     3,4
+ **PI**         3.184.166     1,6        255.114     0,6       5.295       1        22.737     0,9
+ **PR**        10.997.465     5,5      3.759.306     8,3      36.912     6,7       246.111     9,9
+ **RJ**        16.369.179     8,1      3.839.651     8,4      44.316     8,1       132.959     5,3
+ **RN**         3.373.959     1,7        430.289     0,9       5.716       1        27.473     1,1
+ **RO**         1.728.214     0,9        212.652     0,5       4.876     0,9        26.735     1,1
+ **RR**           488.072     0,2         53.704     0,1         825     0,2         3.881     0,2
+ **RS**        11.164.043     5,6      3.622.309       8      36.843     6,7       206.979     8,3
+ **SC**         6.634.254     3,3      2.428.891     5,3      17.606     3,2       139.545     5,6
+ **SE**         2.195.662     1,1        262.664     0,6       5.785     1,1        19.056     0,8
+ **SP**        43.663.669    21,7     15.643.414    34,4     145.166    26,5       643.241    25,8
+ **TO**         1.478.164     0,7        158.702     0,3       4.530     0,8        20.706     0,8
+**TOTAL** **201.062.789** **100** **45.444.386** **100** **547.465** **100** **2.488.680** **100**
