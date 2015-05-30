@@ -242,7 +242,7 @@ tabela <- mutate(dados,maismoto = (MOTOCICLETA>AUTOMOVEL)) %>%
 
 #kable(tabela,caption = "Cidades com mais motocicletas do que automóveis, por estado")
 panderOptions('table.split.table', Inf)
-pandoc.table(tabela, style = "simple",
+pandoc.table(tabela, style = "rmarkdown",
              caption = "**Cidades com mais motocicletas do que automóveis, por estado**",
              justify = c('left',rep('right',3)),
              digits=5,round=1,big.mark=".",decimal.mark=',',
@@ -251,35 +251,35 @@ pandoc.table(tabela, style = "simple",
 
 
 
-UF       Nmun   MaisMoto   percMun
------- ------ ---------- ---------
-**AC**     22         22       100
-**AL**    102         74      72,5
-**AM**     62         58      93,5
-**AP**     16          9      56,2
-**BA**    417        303      72,7
-**CE**    184        174      94,6
-**DF**      1          0         0
-**ES**     78         29      37,2
-**GO**    246         44      17,9
-**MA**    217        214      98,6
-**MG**    853        278      32,6
-**MS**     79          8      10,1
-**MT**    141        111      78,7
-**PA**    144        139      96,5
-**PB**    223        190      85,2
-**PE**    185        145      78,4
-**PI**    224        223      99,6
-**PR**    399          0         0
-**RJ**     92          4       4,3
-**RN**    167        151      90,4
-**RO**     52         49      94,2
-**RR**     15         14      93,3
-**RS**    497          2       0,4
-**SC**    295          0         0
-**SE**     75         55      73,3
-**SP**    645          1       0,2
-**TO**    139        131      94,2
+| UF     |   Nmun |   MaisMoto |   percMun |
+|:-------|-------:|-----------:|----------:|
+| **AC** |     22 |         22 |       100 |
+| **AL** |    102 |         74 |      72,5 |
+| **AM** |     62 |         58 |      93,5 |
+| **AP** |     16 |          9 |      56,2 |
+| **BA** |    417 |        303 |      72,7 |
+| **CE** |    184 |        174 |      94,6 |
+| **DF** |      1 |          0 |         0 |
+| **ES** |     78 |         29 |      37,2 |
+| **GO** |    246 |         44 |      17,9 |
+| **MA** |    217 |        214 |      98,6 |
+| **MG** |    853 |        278 |      32,6 |
+| **MS** |     79 |          8 |      10,1 |
+| **MT** |    141 |        111 |      78,7 |
+| **PA** |    144 |        139 |      96,5 |
+| **PB** |    223 |        190 |      85,2 |
+| **PE** |    185 |        145 |      78,4 |
+| **PI** |    224 |        223 |      99,6 |
+| **PR** |    399 |          0 |         0 |
+| **RJ** |     92 |          4 |       4,3 |
+| **RN** |    167 |        151 |      90,4 |
+| **RO** |     52 |         49 |      94,2 |
+| **RR** |     15 |         14 |      93,3 |
+| **RS** |    497 |          2 |       0,4 |
+| **SC** |    295 |          0 |         0 |
+| **SE** |     75 |         55 |      73,3 |
+| **SP** |    645 |          1 |       0,2 |
+| **TO** |    139 |        131 |      94,2 |
 
 Table: **Cidades com mais motocicletas do que automóveis, por estado**
 
@@ -314,7 +314,7 @@ tabela<-rbind(tabela,Brasil)
 linha=nrow(tabela)
 #panderOptions('knitr.auto.asis', FALSE)
 panderOptions('table.split.table', Inf)
-pandoc.table(tabela, style = "simple",
+pandoc.table(tabela, style = "rmarkdown",
              justify = c('center',rep('right',8)),
              digits=12,round=1,big.mark=".",decimal.mark=',',
              emphasize.strong.rows=linha,
@@ -323,36 +323,36 @@ pandoc.table(tabela, style = "simple",
 
 
 
-   UF           Populacao    pPop     Automoveis   pAuto      Onibus    pOni     Caminhoes    pCam
---------- --------------- ------- -------------- ------- ----------- ------- ------------- -------
- **AC**           776.463     0,4         67.461     0,1         921     0,2         6.297     0,3
- **AL**         3.300.935     1,6        275.556     0,6       6.098     1,1        18.949     0,8
- **AM**         3.807.921     1,9        325.698     0,7       8.517     1,6        19.023     0,8
- **AP**           734.996     0,4         64.386     0,1         917     0,2         3.678     0,1
- **BA**        15.044.137     7,5      1.415.342     3,1      34.421     6,3       106.213     4,3
- **CE**         8.778.576     4,4        881.571     1,9      14.014     2,6        61.047     2,5
- **DF**         2.789.761     1,4      1.099.719     2,4      10.755       2        21.801     0,9
- **ES**         3.839.366     1,9        797.528     1,8      13.555     2,5        64.749     2,6
- **GO**         6.434.048     3,2      1.512.266     3,3      19.507     3,6       100.123       4
- **MA**         6.794.301     3,4        335.793     0,7       6.868     1,3        33.214     1,3
- **MG**        20.593.356    10,2      4.926.454    10,8      67.366    12,3       299.132      12
- **MS**         2.587.269     1,3        580.821     1,3       8.199     1,5        45.487     1,8
- **MT**         3.182.113     1,6        543.484     1,2       9.620     1,8        59.982     2,4
- **PA**         7.999.729       4        455.649       1      14.414     2,6        50.422       2
- **PB**         3.914.421     1,9        407.624     0,9       6.520     1,2        25.508       1
- **PE**         9.208.550     4,6      1.088.338     2,4      17.903     3,3        83.632     3,4
- **PI**         3.184.166     1,6        255.114     0,6       5.295       1        22.737     0,9
- **PR**        10.997.465     5,5      3.759.306     8,3      36.912     6,7       246.111     9,9
- **RJ**        16.369.179     8,1      3.839.651     8,4      44.316     8,1       132.959     5,3
- **RN**         3.373.959     1,7        430.289     0,9       5.716       1        27.473     1,1
- **RO**         1.728.214     0,9        212.652     0,5       4.876     0,9        26.735     1,1
- **RR**           488.072     0,2         53.704     0,1         825     0,2         3.881     0,2
- **RS**        11.164.043     5,6      3.622.309       8      36.843     6,7       206.979     8,3
- **SC**         6.634.254     3,3      2.428.891     5,3      17.606     3,2       139.545     5,6
- **SE**         2.195.662     1,1        262.664     0,6       5.785     1,1        19.056     0,8
- **SP**        43.663.669    21,7     15.643.414    34,4     145.166    26,5       643.241    25,8
- **TO**         1.478.164     0,7        158.702     0,3       4.530     0,8        20.706     0,8
-**TOTAL** **201.062.789** **100** **45.444.386** **100** **547.465** **100** **2.488.680** **100**
+|    UF     |       Populacao |    pPop |     Automoveis |   pAuto |      Onibus |    pOni |     Caminhoes |    pCam |
+|:---------:|----------------:|--------:|---------------:|--------:|------------:|--------:|--------------:|--------:|
+|  **AC**   |         776.463 |     0,4 |         67.461 |     0,1 |         921 |     0,2 |         6.297 |     0,3 |
+|  **AL**   |       3.300.935 |     1,6 |        275.556 |     0,6 |       6.098 |     1,1 |        18.949 |     0,8 |
+|  **AM**   |       3.807.921 |     1,9 |        325.698 |     0,7 |       8.517 |     1,6 |        19.023 |     0,8 |
+|  **AP**   |         734.996 |     0,4 |         64.386 |     0,1 |         917 |     0,2 |         3.678 |     0,1 |
+|  **BA**   |      15.044.137 |     7,5 |      1.415.342 |     3,1 |      34.421 |     6,3 |       106.213 |     4,3 |
+|  **CE**   |       8.778.576 |     4,4 |        881.571 |     1,9 |      14.014 |     2,6 |        61.047 |     2,5 |
+|  **DF**   |       2.789.761 |     1,4 |      1.099.719 |     2,4 |      10.755 |       2 |        21.801 |     0,9 |
+|  **ES**   |       3.839.366 |     1,9 |        797.528 |     1,8 |      13.555 |     2,5 |        64.749 |     2,6 |
+|  **GO**   |       6.434.048 |     3,2 |      1.512.266 |     3,3 |      19.507 |     3,6 |       100.123 |       4 |
+|  **MA**   |       6.794.301 |     3,4 |        335.793 |     0,7 |       6.868 |     1,3 |        33.214 |     1,3 |
+|  **MG**   |      20.593.356 |    10,2 |      4.926.454 |    10,8 |      67.366 |    12,3 |       299.132 |      12 |
+|  **MS**   |       2.587.269 |     1,3 |        580.821 |     1,3 |       8.199 |     1,5 |        45.487 |     1,8 |
+|  **MT**   |       3.182.113 |     1,6 |        543.484 |     1,2 |       9.620 |     1,8 |        59.982 |     2,4 |
+|  **PA**   |       7.999.729 |       4 |        455.649 |       1 |      14.414 |     2,6 |        50.422 |       2 |
+|  **PB**   |       3.914.421 |     1,9 |        407.624 |     0,9 |       6.520 |     1,2 |        25.508 |       1 |
+|  **PE**   |       9.208.550 |     4,6 |      1.088.338 |     2,4 |      17.903 |     3,3 |        83.632 |     3,4 |
+|  **PI**   |       3.184.166 |     1,6 |        255.114 |     0,6 |       5.295 |       1 |        22.737 |     0,9 |
+|  **PR**   |      10.997.465 |     5,5 |      3.759.306 |     8,3 |      36.912 |     6,7 |       246.111 |     9,9 |
+|  **RJ**   |      16.369.179 |     8,1 |      3.839.651 |     8,4 |      44.316 |     8,1 |       132.959 |     5,3 |
+|  **RN**   |       3.373.959 |     1,7 |        430.289 |     0,9 |       5.716 |       1 |        27.473 |     1,1 |
+|  **RO**   |       1.728.214 |     0,9 |        212.652 |     0,5 |       4.876 |     0,9 |        26.735 |     1,1 |
+|  **RR**   |         488.072 |     0,2 |         53.704 |     0,1 |         825 |     0,2 |         3.881 |     0,2 |
+|  **RS**   |      11.164.043 |     5,6 |      3.622.309 |       8 |      36.843 |     6,7 |       206.979 |     8,3 |
+|  **SC**   |       6.634.254 |     3,3 |      2.428.891 |     5,3 |      17.606 |     3,2 |       139.545 |     5,6 |
+|  **SE**   |       2.195.662 |     1,1 |        262.664 |     0,6 |       5.785 |     1,1 |        19.056 |     0,8 |
+|  **SP**   |      43.663.669 |    21,7 |     15.643.414 |    34,4 |     145.166 |    26,5 |       643.241 |    25,8 |
+|  **TO**   |       1.478.164 |     0,7 |        158.702 |     0,3 |       4.530 |     0,8 |        20.706 |     0,8 |
+| **TOTAL** | **201.062.789** | **100** | **45.444.386** | **100** | **547.465** | **100** | **2.488.680** | **100** |
 
 ####8. As 10 cidades cearenses com *maior* percentual de motocicletas
 
@@ -363,7 +363,7 @@ tabela <- filter(dados,UF=='CE') %>%
         arrange(desc(percM)) %>%
         select(MUNICIPIO,TOTAL,MOTOCICLETA,percM)
 panderOptions('table.split.table', Inf)
-pandoc.table(head(tabela,10), style = "simple",
+pandoc.table(head(tabela,10), style = "rmarkdown",
              caption = "**Cidades cearenses com maior percentual de motocicletas na frota**",
              justify = c('left',rep('right',3)),
              digits=5,round=1,big.mark=".",decimal.mark=',',
@@ -372,18 +372,18 @@ pandoc.table(head(tabela,10), style = "simple",
 
 
 
-MUNICIPIO                       TOTAL   MOTOCICLETA   percM
------------------------------ ------- ------------- -------
-**PEREIRO**                     7.342         6.180    84,2
-**ARATUBA**                     2.171         1.711    78,8
-**DEPUTADO IRAPUAN PINHEIRO**   2.051         1.616    78,8
-**AIUABA**                      2.082         1.624      78
-**QUIXELO**                     3.771         2.924    77,5
-**CHORO**                       1.963         1.516    77,2
-**ERERE**                         784           603    76,9
-**SOLONOPOLE**                  4.565         3.498    76,6
-**MIRAIMA**                     1.569         1.191    75,9
-**MILHA**                       3.840         2.901    75,5
+| MUNICIPIO                     |   TOTAL |   MOTOCICLETA |   percM |
+|:------------------------------|--------:|--------------:|--------:|
+| **PEREIRO**                   |   7.342 |         6.180 |    84,2 |
+| **ARATUBA**                   |   2.171 |         1.711 |    78,8 |
+| **DEPUTADO IRAPUAN PINHEIRO** |   2.051 |         1.616 |    78,8 |
+| **AIUABA**                    |   2.082 |         1.624 |      78 |
+| **QUIXELO**                   |   3.771 |         2.924 |    77,5 |
+| **CHORO**                     |   1.963 |         1.516 |    77,2 |
+| **ERERE**                     |     784 |           603 |    76,9 |
+| **SOLONOPOLE**                |   4.565 |         3.498 |    76,6 |
+| **MIRAIMA**                   |   1.569 |         1.191 |    75,9 |
+| **MILHA**                     |   3.840 |         2.901 |    75,5 |
 
 Table: **Cidades cearenses com maior percentual de motocicletas na frota**
 
@@ -393,7 +393,7 @@ Table: **Cidades cearenses com maior percentual de motocicletas na frota**
 ```r
 tabela <- arrange(tabela,percM)
 panderOptions('table.split.table', Inf)
-pandoc.table(head(tabela,10), style = "simple",
+pandoc.table(head(tabela,10), style = "rmarkdown",
              caption = "**Cidades cearenses com menor percentual de motocicletas na frota**",
              justify = c('left',rep('right',3)),
              digits=5,round=1,big.mark=".",decimal.mark=',',
@@ -402,18 +402,18 @@ pandoc.table(head(tabela,10), style = "simple",
 
 
 
-MUNICIPIO        TOTAL   MOTOCICLETA   percM
--------------- ------- ------------- -------
-**FORTALEZA**  908.074       229.154    25,2
-**EUSEBIO**     16.402         4.494    27,4
-**FORTIM**       2.105           712    33,8
-**IPAUMIRIM**    8.221         3.036    36,9
-**MARACANAU**   51.050        19.115    37,4
-**CASCAVEL**    13.655         5.127    37,5
-**BEBERIBE**     8.304         3.171    38,2
-**PACAJUS**     17.312         6.750      39
-**CHOROZINHO**   4.349         1.720    39,5
-**CAUCAIA**     64.701        25.707    39,7
+| MUNICIPIO      |   TOTAL |   MOTOCICLETA |   percM |
+|:---------------|--------:|--------------:|--------:|
+| **FORTALEZA**  | 908.074 |       229.154 |    25,2 |
+| **EUSEBIO**    |  16.402 |         4.494 |    27,4 |
+| **FORTIM**     |   2.105 |           712 |    33,8 |
+| **IPAUMIRIM**  |   8.221 |         3.036 |    36,9 |
+| **MARACANAU**  |  51.050 |        19.115 |    37,4 |
+| **CASCAVEL**   |  13.655 |         5.127 |    37,5 |
+| **BEBERIBE**   |   8.304 |         3.171 |    38,2 |
+| **PACAJUS**    |  17.312 |         6.750 |      39 |
+| **CHOROZINHO** |   4.349 |         1.720 |    39,5 |
+| **CAUCAIA**    |  64.701 |        25.707 |    39,7 |
 
 Table: **Cidades cearenses com menor percentual de motocicletas na frota**
 
@@ -425,7 +425,7 @@ tabela <- filter(dados,UF=='CE') %>%
         mutate(APM = 1000 * AUTOMOVEL/POPULACAO) %>%
         select(MUNICIPIO,POPULACAO,AUTOMOVEL,APM) %>%
         arrange(desc(APM))
-pandoc.table(head(tabela,10), style = "simple",
+pandoc.table(head(tabela,10), style = "rmarkdown",
              caption = "**Cidades cearenses com maior numero de automoveis por 1000 habitantes**",
              justify = c('left',rep('right',3)),
              digits=5,round=1,big.mark=".",decimal.mark=',',
@@ -434,18 +434,18 @@ pandoc.table(head(tabela,10), style = "simple",
 
 
 
-MUNICIPIO               POPULACAO   AUTOMOVEL   APM
---------------------- ----------- ----------- -----
-**IPAUMIRIM**              12.256       3.248   265
-**FORTALEZA**           2.551.806     511.109 200,3
-**EUSEBIO**                49.455       7.050 142,6
-**MARACANAU**             217.922      23.899 109,7
-**JUAZEIRO DO NORTE**     261.289      27.979 107,1
-**PACAJUS**                66.510       6.951 104,5
-**CRATO**                 126.591      13.095 103,4
-**TIANGUA**                72.110       7.294 101,2
-**CHOROZINHO**             19.187       1.876  97,8
-**LIMOEIRO DO NORTE**      57.372       5.500  95,9
+| MUNICIPIO             |   POPULACAO |   AUTOMOVEL |   APM |
+|:----------------------|------------:|------------:|------:|
+| **IPAUMIRIM**         |      12.256 |       3.248 |   265 |
+| **FORTALEZA**         |   2.551.806 |     511.109 | 200,3 |
+| **EUSEBIO**           |      49.455 |       7.050 | 142,6 |
+| **MARACANAU**         |     217.922 |      23.899 | 109,7 |
+| **JUAZEIRO DO NORTE** |     261.289 |      27.979 | 107,1 |
+| **PACAJUS**           |      66.510 |       6.951 | 104,5 |
+| **CRATO**             |     126.591 |      13.095 | 103,4 |
+| **TIANGUA**           |      72.110 |       7.294 | 101,2 |
+| **CHOROZINHO**        |      19.187 |       1.876 |  97,8 |
+| **LIMOEIRO DO NORTE** |      57.372 |       5.500 |  95,9 |
 
 Table: **Cidades cearenses com maior numero de automoveis por 1000 habitantes**
 

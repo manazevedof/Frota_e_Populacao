@@ -968,7 +968,7 @@ kable(tabela[1:10])</code></pre>
 
 #kable(tabela,caption = &quot;Cidades com mais motocicletas do que automóveis, por estado&quot;)
 panderOptions('table.split.table', Inf)
-pandoc.table(tabela, style = &quot;simple&quot;,
+pandoc.table(tabela, style = &quot;rmarkdown&quot;,
              caption = &quot;**Cidades com mais motocicletas do que automóveis, por estado**&quot;,
              justify = c('left',rep('right',3)),
              digits=5,round=1,big.mark=&quot;.&quot;,decimal.mark=',',
@@ -1178,7 +1178,7 @@ tabela&lt;-rbind(tabela,Brasil)
 linha=nrow(tabela)
 #panderOptions('knitr.auto.asis', FALSE)
 panderOptions('table.split.table', Inf)
-pandoc.table(tabela, style = &quot;simple&quot;,
+pandoc.table(tabela, style = &quot;rmarkdown&quot;,
              justify = c('center',rep('right',8)),
              digits=12,round=1,big.mark=&quot;.&quot;,decimal.mark=',',
              emphasize.strong.rows=linha,
@@ -1516,7 +1516,7 @@ pandoc.table(tabela, style = &quot;simple&quot;,
         arrange(desc(percM)) %&gt;%
         select(MUNICIPIO,TOTAL,MOTOCICLETA,percM)
 panderOptions('table.split.table', Inf)
-pandoc.table(head(tabela,10), style = &quot;simple&quot;,
+pandoc.table(head(tabela,10), style = &quot;rmarkdown&quot;,
              caption = &quot;**Cidades cearenses com maior percentual de motocicletas na frota**&quot;,
              justify = c('left',rep('right',3)),
              digits=5,round=1,big.mark=&quot;.&quot;,decimal.mark=',',
@@ -1599,7 +1599,7 @@ pandoc.table(head(tabela,10), style = &quot;simple&quot;,
 <h4>9. As 10 cidades cearenses com <em>menor</em> percentual de motocicletas</h4>
 <pre class="r"><code>tabela &lt;- arrange(tabela,percM)
 panderOptions('table.split.table', Inf)
-pandoc.table(head(tabela,10), style = &quot;simple&quot;,
+pandoc.table(head(tabela,10), style = &quot;rmarkdown&quot;,
              caption = &quot;**Cidades cearenses com menor percentual de motocicletas na frota**&quot;,
              justify = c('left',rep('right',3)),
              digits=5,round=1,big.mark=&quot;.&quot;,decimal.mark=',',
@@ -1684,7 +1684,7 @@ pandoc.table(head(tabela,10), style = &quot;simple&quot;,
         mutate(APM = 1000 * AUTOMOVEL/POPULACAO) %&gt;%
         select(MUNICIPIO,POPULACAO,AUTOMOVEL,APM) %&gt;%
         arrange(desc(APM))
-pandoc.table(head(tabela,10), style = &quot;simple&quot;,
+pandoc.table(head(tabela,10), style = &quot;rmarkdown&quot;,
              caption = &quot;**Cidades cearenses com maior numero de automoveis por 1000 habitantes**&quot;,
              justify = c('left',rep('right',3)),
              digits=5,round=1,big.mark=&quot;.&quot;,decimal.mark=',',
