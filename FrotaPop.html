@@ -101,7 +101,7 @@ dados &lt;- select(dados[estados],-c(ESTADO,CAPITAL))</code></pre>
                   Automoveis = sum(AUTOMOVEL),
                   APM = 1000 * sum(AUTOMOVEL)/sum(POPULACAO)) %&gt;%
         arrange(desc(APM))
-kable(tabela)</code></pre>
+kable(tabela, format = &quot;markdown&quot;)</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -373,7 +373,7 @@ kable(tabela)</code></pre>
 
 APMcap &lt;- 1000 * sum(tabela$AUTOMOVEL)/sum(tabela$POPULACAO)
 APMbr &lt;- 1000 * sum(dados$AUTOMOVEL)/sum(dados$POPULACAO)
-kable(tabela)</code></pre>
+kable(tabela, format = &quot;markdown&quot;)</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -709,7 +709,7 @@ ggplot(data=tabela, aes(x=ordem, y=APM)) +
         mutate(MPM = 1000 * Motocicletas/Populacao) %&gt;%
         select(REGIAO,Populacao,Veiculos,Automoveis,APM,Motocicletas,MPM) %&gt;%
         arrange(desc(APM))
-kable(tabela)</code></pre>
+kable(tabela, format = &quot;markdown&quot;)</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -783,7 +783,7 @@ ggplot(data=tabela, aes(x=ordem, y=APM)) +
 <pre class="r"><code>tabela &lt;- mutate(dados,percM = 100 * MOTOCICLETA/TOTAL) %&gt;%
         arrange(desc(percM)) %&gt;%
         select(MUNICIPIO,UF,TOTAL,MOTOCICLETA,percM)
-kable(tabela[1:10])</code></pre>
+kable(tabela[1:10], format = &quot;markdown&quot;)</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -873,7 +873,7 @@ kable(tabela[1:10])</code></pre>
 <pre class="r"><code>tabela &lt;- mutate(dados,APM = 1000 * AUTOMOVEL/POPULACAO) %&gt;%
         select(MUNICIPIO,UF,POPULACAO,AUTOMOVEL,APM) %&gt;%
         arrange(desc(APM))
-kable(tabela[1:10])</code></pre>
+kable(tabela[1:10], format = &quot;markdown&quot;)</code></pre>
 <table>
 <thead>
 <tr class="header">
