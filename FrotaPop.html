@@ -1769,7 +1769,7 @@ pandoc.table(head(tabela,10), style = &quot;simple&quot;,
         mutate(VPM = 1000 * TOTAL/POPULACAO) %&gt;%
         select(MUNICIPIO,POPULACAO,TOTAL,VPM) %&gt;%
         arrange(desc(VPM))
-pandoc.table(head(tabela,10), style = &quot;simple&quot;,
+pandoc.table(head(tabela,10), style = &quot;rmarkdown&quot;,
              caption = &quot;**Cidades cearenses com maior numero de veículos por 1000 habitantes**&quot;,
              justify = c('left',rep('right',3)),
              digits=5,round=1,big.mark=&quot;.&quot;,decimal.mark=',',

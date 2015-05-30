@@ -222,7 +222,7 @@ tabela <- filter(dados,UF=='CE') %>%
         mutate(VPM = 1000 * TOTAL/POPULACAO) %>%
         select(MUNICIPIO,POPULACAO,TOTAL,VPM) %>%
         arrange(desc(VPM))
-pandoc.table(head(tabela,10), style = "simple",
+pandoc.table(head(tabela,10), style = "rmarkdown",
              caption = "**Cidades cearenses com maior numero de veículos por 1000 habitantes**",
              justify = c('left',rep('right',3)),
              digits=5,round=1,big.mark=".",decimal.mark=',',

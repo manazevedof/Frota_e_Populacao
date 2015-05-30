@@ -457,7 +457,7 @@ tabela <- filter(dados,UF=='CE') %>%
         mutate(VPM = 1000 * TOTAL/POPULACAO) %>%
         select(MUNICIPIO,POPULACAO,TOTAL,VPM) %>%
         arrange(desc(VPM))
-pandoc.table(head(tabela,10), style = "simple",
+pandoc.table(head(tabela,10), style = "rmarkdown",
              caption = "**Cidades cearenses com maior numero de veículos por 1000 habitantes**",
              justify = c('left',rep('right',3)),
              digits=5,round=1,big.mark=".",decimal.mark=',',
@@ -466,17 +466,17 @@ pandoc.table(head(tabela,10), style = "simple",
 
 
 
-MUNICIPIO                   POPULACAO   TOTAL   VPM
-------------------------- ----------- ------- -----
-**IPAUMIRIM**                  12.256   8.221 670,8
-**TABULEIRO DO NORTE**         30.018  14.255 474,9
-**PEREIRO**                    16.063   7.342 457,1
-**LIMOEIRO DO NORTE**          57.372  23.882 416,3
-**RUSSAS**                     73.436  28.391 386,6
-**IGUATU**                    100.053  38.514 384,9
-**SOBRAL**                    197.663  72.730 367,9
-**TIANGUA**                    72.110  26.303 364,8
-**FORTALEZA**               2.551.806 908.074 355,9
-**SAO JOAO DO JAGUARIBE**       7.829   2.783 355,5
+| MUNICIPIO                 |   POPULACAO |   TOTAL |   VPM |
+|:--------------------------|------------:|--------:|------:|
+| **IPAUMIRIM**             |      12.256 |   8.221 | 670,8 |
+| **TABULEIRO DO NORTE**    |      30.018 |  14.255 | 474,9 |
+| **PEREIRO**               |      16.063 |   7.342 | 457,1 |
+| **LIMOEIRO DO NORTE**     |      57.372 |  23.882 | 416,3 |
+| **RUSSAS**                |      73.436 |  28.391 | 386,6 |
+| **IGUATU**                |     100.053 |  38.514 | 384,9 |
+| **SOBRAL**                |     197.663 |  72.730 | 367,9 |
+| **TIANGUA**               |      72.110 |  26.303 | 364,8 |
+| **FORTALEZA**             |   2.551.806 | 908.074 | 355,9 |
+| **SAO JOAO DO JAGUARIBE** |       7.829 |   2.783 | 355,5 |
 
 Table: **Cidades cearenses com maior numero de veículos por 1000 habitantes**
